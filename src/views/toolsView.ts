@@ -18,5 +18,4 @@ export default {
   renderMany(tools: Tool[]){
     return tools.map(tool => this.render(tool));
   }
-
 };

@@ -56,7 +56,6 @@ export default {
 
     const toolsCollection = mongoose.model<Tool>('tools', ToolsSchema);
     const tool = await toolsCollection.create(data);
-    
   
     return res.status(201).json(ToolView.render(tool));
   },
@@ -83,7 +82,6 @@ export default {
       if(tool == null){
         return res.status(404).json({message: 'Tool not found!'});
       }
-
       
       return res.status(200).json(ToolView.render(tool));
     }
@@ -92,14 +90,13 @@ export default {
   async remove(req: Request, res: Response){
     if(mongoose.Types.ObjectId.isValid(new mongoose.Types.ObjectId(req.params.id))){
       const toolsCollection = mongoose.model<Tool>('tools', ToolsSchema);
-      
       const tool = await toolsCollection.findOneAndDelete({ _id: req.params.id });
 
       if(tool == null){
         return res.status(404).json({message: 'Tool not found!'});
       }
 
-      return res.status(204).json(ToolView.render(tool));
+      return res.status(204).json();
     }
   }
 };

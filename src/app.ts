@@ -1,6 +1,7 @@
 import express, { Request, Response, NextFunction } from 'express';
 import 'express-async-errors';
 import helmet from 'helmet';
+import mongoose from 'mongoose';
 
 import './database/connection';
 import errorHandler from './errors/handler';
@@ -30,6 +31,21 @@ app.use(express.json());
 
 // Routes
 app.use(routes.tools);
+app.use(routes.authentication);
+
+// Only available if there is no user in the database
+mongoose.connection.on('open', () => {
+  mongoose.connection.db.collection('users', async (err, collection) => {
+    if(!err && collection){
+      const docs = await collection.countDocuments();
+      if(docs == 0){
+        app.use(routes.firstTime);
+      }
+    }else{
+      throw err;
+    }
+  });
+});
 
 // Error handling as middleware (catches all errors in app)
 app.use(errorHandler);
