@@ -1,9 +1,10 @@
 import mongoose from 'mongoose';
+import config from '../configs/main';
 import databaseConfig from '../configs/database';
 import createDatabase from './buildNecessaryDatabase';
 
 (async () => {
-  await mongoose.connect(`${process.env.MONGO_URL}`, databaseConfig);
+  await mongoose.connect(`${config.mongoURL}`, databaseConfig);
   mongoose.set('returnOriginal', false);
 
   // Create the database if there's none.
@@ -14,7 +15,7 @@ import createDatabase from './buildNecessaryDatabase';
     createDatabase();
   }
 
-  if(process.env.NODE_ENV == 'test'){
+  if(config.envName == 'test'){
     mongoose.connection.db.dropDatabase();
   }
 })();

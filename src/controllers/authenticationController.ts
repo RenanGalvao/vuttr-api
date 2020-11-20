@@ -11,10 +11,12 @@ import User from '../interfaces/usersInterface';
 export default {
   async verify(req: Request, res: Response){
 
-    const data = <User>{
+    // Recover data in User format
+    const data = {
       ...req.body
-    };
+    } as User;
 
+    // Checks whether the data sent is valid
     const schema = Yup.object().shape({
       email: Yup.string().email().required().trim(),
       password: Yup.string().required().trim()
@@ -30,12 +32,15 @@ export default {
 
     }else{
 
+      // Test for the password because the user interface says the password is optional
+      // In the Mongo scheme it is not, it is in this way to use the same interface in PUT
       if(user.password !== undefined){
 
         const auth = await bcrypt.compare(data.password, user.password);
   
         if(auth){
 
+          // Configure the JWT token to be sent to the user
           const payload = { userId: user._id };
           const privateKey = fs.readFileSync(path.join(__dirname, '..', '..', 'keys', 'private.pen'));
           const options = { algorithm: 'RS256', expiresIn: '1h'} as jwt.SignOptions;
@@ -48,6 +53,7 @@ export default {
 
         }else{
 
+          // Wrong password
           return res.status(400).json({ auth: false });
 
         }

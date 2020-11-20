@@ -1,36 +1,41 @@
 import { Request, Response } from 'express';
 import mongoose from 'mongoose';
 import * as Yup from 'yup';
-
 import ToolsSchema from '../schemas/toolsSchema';
 import ToolView from '../views/toolsView';
 import Tool from '../interfaces/toolsInterface';
-
 import ExtendedObject from '../interfaces/objectThatAcceptsStringIndexes';
 
-export default {
-  async index(req: Request, res: Response){
 
+export default {
+
+  // Returns all route data or according to the filter
+  async index(req: Request, res: Response){
+    // Filters the search result using keys and values ​​sent by the query string
     let queryObj = {} as ExtendedObject;
     for(let i = 0; i < Object.keys(req.query).length; i++){
+      // Create key and value pairs that will be used next
       queryObj[Object.keys(req.query)[i]] = Object.values(req.query)[i];
     }
 
     const toolsCollection = mongoose.model<Tool>('tools', ToolsSchema);
     const tools = await toolsCollection.find(queryObj);
 
-      if(tools.length == 0){
-        return res.status(404).json({message: 'Tools not found!'});
-      }
+    // If the database is empty
+    if(tools.length == 0){
+      return res.status(404).json({message: 'Tools not found!'});
+    }
 
     return res.json(ToolView.renderMany(tools));
   },
 
   async show(req: Request, res: Response){
+    // Argument passed in must be a single String of 12 bytes or a string of 24 hex characters
     if(mongoose.Types.ObjectId.isValid(new mongoose.Types.ObjectId(req.params.id))){
       const toolsCollection = mongoose.model<Tool>('tools', ToolsSchema);
       const tool = await toolsCollection.findOne({ _id: req.params.id });
 
+      // If its not found
       if(tool == null){
         return res.status(404).json({message: 'Tool not found!'});
       }

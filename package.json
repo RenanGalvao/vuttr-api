@@ -1,5 +1,5 @@
 {
-  "name": "bossabox-api",
+  "name": "vuttr-api",
   "version": "1.0.0",
   "description": "Desafio back-end",
   "main": "dist/app.js",
@@ -7,9 +7,9 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "start": "node dist/app -r dotenv/config dist/app.js dotenv_config_path=env/prod.env",
-    "dev": "./node_modules/.bin/ts-node-dev -r dotenv/config --transpile-only --ignore-watch node_modules src/app.ts dotenv_config_path=env/dev.env",
-    "test": "mocha --recursive --exit -r ./node_modules/.bin/ts-node-dev/register \"./test/**/*.ts\""
+    "start": "NODE_ENV=production node dist/app dist/app.js",
+    "dev": "NODE_ENV=development ./node_modules/.bin/ts-node-dev --transpile-only --ignore-watch node_modules src/app.ts",
+    "test": "NODE_ENV=test mocha --recursive --exit -r ./node_modules/.bin/ts-node-dev/register \"./test/**/*.ts\""
   },
   "devDependencies": {
     "@types/bcrypt": "3.0.0",

@@ -1,8 +1,10 @@
--Terminar controller
-  -verificar se aparentemente os requisitos estão sendo seguidos
+-comentar o código onde necessário (continuar toolsController)
+- API BLUEPRINT ou o outro
 -criar testes
 -compilar no dist e fazer um realease no github
--Readme baseado no dist e readme baseado no repositório como um todo
+-Atualizar README
+-Testar no windows e ver se dá algum problema com os paths
 
 DEPOIS:
   adicionar algo a mais que eles peçam
+  verificar se aparentemente os requisitos estão sendo seguidos

@@ -6,6 +6,7 @@ import mongoose from 'mongoose';
 import './database/connection';
 import errorHandler from './errors/handler';
 import * as routes from './routes/index';
+import config from './configs/main';
 
 const app = express();
 
@@ -14,7 +15,7 @@ app.use(helmet());
 
 // CORS
 app.use(function(req: Request, res: Response, next: NextFunction): any{
-	const allowedOrigins: Array<string | undefined> = ['http://localhost'];
+	const allowedOrigins: Array<string | undefined> = config.allowedOrigins;
     const origin: string | undefined = req.headers.origin;
     if(origin && allowedOrigins.indexOf(origin) > -1){
       res.setHeader('Access-Control-Allow-Origin', origin);
@@ -51,8 +52,8 @@ mongoose.connection.on('open', () => {
 app.use(errorHandler);
 
 // Starts server
-app.listen(process.env.SERVER_PORT, () => {
-  console.log(`Listening on ${process.env.SERVER_PORT} port`);
+app.listen(config.serverPort, () => {
+  console.log(`Listening on ${config.serverPort} port`);
 });
 
 // Export app for testing
