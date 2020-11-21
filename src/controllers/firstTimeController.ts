@@ -26,7 +26,7 @@ export default {
       ...req.body
     } as User;
     
-     // Checks whether the data sent is valid
+    // Checks whether the data sent is valid
     const schema = Yup.object().shape({
       name: Yup.string().required(),
       email: Yup.string().email().required(),

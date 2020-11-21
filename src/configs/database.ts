@@ -1,6 +1,8 @@
+/*
+* Mongoose connection options
+*/
 import { ConnectionOptions } from 'mongoose';
 
-// Mongoose connection options
 export default {
   keepAlive: true, 
   keepAliveInitialDelay: 300000,

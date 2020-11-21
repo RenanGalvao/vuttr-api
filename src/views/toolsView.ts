@@ -1,5 +1,8 @@
+/*
+* This file defines what information will be returned to the user. 
+* if you want something not to go to the user, just omit the object's key and value.
+*/
 import Tool from '../interfaces/toolsInterface';
-
 
 export default {
 

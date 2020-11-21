@@ -1,3 +1,6 @@
+/*
+* Works when the application is started for the first time or after the API database is deleted.
+*/
 import mongoose from 'mongoose';
 import ToolsSchema from '../schemas/toolsSchema';
 import Tool from '../interfaces/toolsInterface';

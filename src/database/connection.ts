@@ -15,6 +15,8 @@ import createDatabase from './buildNecessaryDatabase';
     createDatabase();
   }
 
+  // Test has a specific database (minimal) that needs to be
+  // droped every time before the tests.
   if(config.envName == 'test'){
     mongoose.connection.db.dropDatabase();
   }

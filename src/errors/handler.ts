@@ -1,3 +1,9 @@
+/*
+* This is a middleware that takes all the errors of the application and gathers it here. 
+* I am using 'express-async-errors' to make this work since this package allows errors thrown 
+* in the application to be passed on through middleware.
+*/
+
 import { ErrorRequestHandler } from 'express';
 import mongoose from 'mongoose';
 import { ValidationError } from 'yup';
@@ -6,6 +12,7 @@ import ExtendedObject from '../interfaces/objectThatAcceptsStringIndexes';
 
 const errorHandler:ErrorRequestHandler = (error, request, response, next) => {
     
+  // Create an error(s) object based on Yup's validation fails
   if(error instanceof ValidationError){
     let errors: ExtendedObject = {};
     error.inner.forEach(err => {

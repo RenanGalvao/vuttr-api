@@ -1,9 +1,9 @@
--comentar o código onde necessário (continuar toolsController)
 - API BLUEPRINT ou o outro
 -criar testes
 -compilar no dist e fazer um realease no github
 -Atualizar README
 -Testar no windows e ver se dá algum problema com os paths
+-criar um rota para deleter o banco de dados todo
 
 DEPOIS:
   adicionar algo a mais que eles peçam

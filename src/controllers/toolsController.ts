@@ -45,10 +45,13 @@ export default {
   },
 
   async create(req: Request, res: Response){
+    // Recover data in Tool format
     const data = {
       ...req.body
     } as Tool;
     
+
+    // Checks whether the data sent is valid
     const schema = Yup.object().shape({
       title: Yup.string().required(),
       link: Yup.string().required(),
@@ -95,9 +98,9 @@ export default {
   async remove(req: Request, res: Response){
     if(mongoose.Types.ObjectId.isValid(new mongoose.Types.ObjectId(req.params.id))){
       const toolsCollection = mongoose.model<Tool>('tools', ToolsSchema);
-      const tool = await toolsCollection.findOneAndDelete({ _id: req.params.id });
+      const tool = await toolsCollection.deleteOne({ _id: req.params.id });
 
-      if(tool == null){
+      if(tool.deletedCount == 0){
         return res.status(404).json({message: 'Tool not found!'});
       }
 

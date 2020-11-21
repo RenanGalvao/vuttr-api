@@ -1,5 +1,8 @@
+/*
+* This file defines what information will be returned to the user. 
+* If you want something not to go to the user, just omit the object's key and value.
+*/
 import User from '../interfaces/usersInterface';
-
 
 export default {
 
