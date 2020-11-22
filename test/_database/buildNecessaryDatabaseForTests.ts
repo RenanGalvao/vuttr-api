@@ -25,6 +25,7 @@ export { userCredentials};
 
 describe('Creating database for testing', () => {
   
+  /*
   it('User Collection', async () => {
 
     const usersCollection = mongoose.model<User>('users', UserSchema);
@@ -33,7 +34,7 @@ describe('Creating database for testing', () => {
       password: await bcrypt.hash(userCredentials.password, 10),
     });
   });
-
+  */
   it('Tool Collection', async () => {
 
     const toolsCollection = mongoose.model<Tool>('tools', ToolsSchema);

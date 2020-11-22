@@ -7,16 +7,17 @@ import createDatabase from './buildNecessaryDatabase';
   await mongoose.connect(`${config.mongoURL}`, databaseConfig);
   mongoose.set('returnOriginal', false);
 
-  // Create the database if there's none.
-  // Keep in mind that each environment has its own database.
-  // dev: vuttr-dev, prod: vuttr.
-  const collectionsIndatabase = await mongoose.connection.db.listCollections().toArray();
-  if(collectionsIndatabase.length == 0 && config.envName != 'test'){
-    createDatabase();
-  }
-
   // Drop database for testing enviroment
   if(config.envName == 'test'){
     mongoose.connection.db.dropDatabase();
   }
+
+  // Create the database if there's none.
+  // Keep in mind that each environment has its own database.
+  // test: vuttr-test, dev: vuttr-dev, prod: vuttr.
+  const collectionsIndatabase = await mongoose.connection.db.listCollections().toArray();
+  if(collectionsIndatabase.length == 0){
+    createDatabase();
+  }
+
 })();

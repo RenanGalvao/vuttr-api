@@ -34,19 +34,8 @@ app.use(express.json());
 app.use(routes.tools);
 app.use(routes.authentication);
 
-// Only available if there is no user in the database
-mongoose.connection.on('open', () => {
-  mongoose.connection.db.collection('users', async (err, collection) => {
-    if(!err && collection){
-      const docs = await collection.countDocuments();
-      if(docs == 0){
-        app.use(routes.firstTime);
-      }
-    }else{
-      throw err;
-    }
-  });
-});
+// Only available if there is no user in the database, otherwise sends 403
+app.use(routes.firstTime);
 
 // Error handling as middleware (catches all errors in app)
 app.use(errorHandler);

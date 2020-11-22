@@ -54,7 +54,7 @@ export default {
         }else{
 
           // Wrong password
-          return res.status(400).json({ auth: false });
+          return res.status(401).json({ auth: false });
 
         }
       }

@@ -2,6 +2,7 @@ import chai from 'chai';
 import chaiHttp from 'chai-http';
 import app from '../../src/app';
 import Tool from '../../src/interfaces/toolsInterface';
+// @ts-ignore
 import { userCredentials } from '../_database/buildNecessaryDatabaseForTests';
 
 const expect = chai.expect;
@@ -9,7 +10,7 @@ chai.use(chaiHttp);
 
 
 /*
-  Variables used in tests
+ *  Variables used in tests
 */
 const validPostData = {
   title: 'screwdriver',
