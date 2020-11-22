@@ -54,7 +54,7 @@ Your response (If your credentials are correct) will be something like this:
   "token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.e..."
 }
 ```
-Use this token in all subsequents requests as Bearer token, it expires in 1 hour.If for any reason you have lost your access, send a DELETE request to /drop-database/yes (only in development enviroment). Then restart the application and you will be able to create another credential following the previous steps.
+Use this token in all subsequents requests as Bearer token, it expires in 1 hour .If for any reason you have lost your access, send a DELETE request to /drop-database/yes (only in development enviroment). Then restart the application and you will be able to create another credential following the previous steps.
 
 ## Simple Usage
 If you want to add a resource to the API, Send a POST request to localhost:3000/tools:
