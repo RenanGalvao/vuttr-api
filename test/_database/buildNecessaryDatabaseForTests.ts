@@ -8,33 +8,17 @@ import User from '../../src/interfaces/usersInterface';
 import ToolsSchema from '../../src/schemas/toolsSchema';
 import Tool from '../../src/interfaces/toolsInterface';
 
+
 const userCredentials = {
   email: 'assis.machado@gmail.com',
   password: 'quincasborbamaiorfilosofo',
 } as User;
-
-let userData = {
-  name: 'Machado de Assis',
-  email: 'assis.machado@gmail.com',
-  password: '',
-} as User;
-
 
 export { userCredentials};
 
 
 describe('Creating database for testing', () => {
   
-  /*
-  it('User Collection', async () => {
-
-    const usersCollection = mongoose.model<User>('users', UserSchema);
-    await usersCollection.create({
-      ...userData,
-      password: await bcrypt.hash(userCredentials.password, 10),
-    });
-  });
-  */
   it('Tool Collection', async () => {
 
     const toolsCollection = mongoose.model<Tool>('tools', ToolsSchema);

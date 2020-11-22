@@ -1,6 +1,3 @@
--criar um rota para deleter o banco de dados todo /delete-database/yes e teste
-
--Não permitir que um usuário modifique o de outro usando referência do id de quem criou...
 -compilar no dist e fazer um realease no github
 -Atualizar README
 -Testar no windows e ver se dá algum problema com os paths

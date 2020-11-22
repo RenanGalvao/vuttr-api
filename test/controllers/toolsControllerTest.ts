@@ -10,7 +10,7 @@ chai.use(chaiHttp);
 
 
 /*
- *  Variables used in tests
+* Variables used in tests
 */
 const validPostData = {
   title: 'screwdriver',

@@ -9,7 +9,7 @@ const expect = chai.expect;
 chai.use(chaiHttp);
 
 /*
- *  Variables used in tests
+* Variables used in tests
 */
 const invalidPostData = {
   email: '',

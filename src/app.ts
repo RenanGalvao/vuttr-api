@@ -34,8 +34,13 @@ app.use(express.json());
 app.use(routes.tools);
 app.use(routes.authentication);
 
-// Only available if there is no user in the database, otherwise sends 403
-app.use(routes.firstTime);
+// The next two routes are only available in dev/test enviroment for security reasons
+if(config.envName == 'development' || config.envName == 'test'){
+  app.use(routes.dropDatabase);
+
+  // Only available if there is no user in the database, otherwise sends 403
+  app.use(routes.firstTime);
+}
 
 // Error handling as middleware (catches all errors in app)
 app.use(errorHandler);
