@@ -6,6 +6,11 @@ import ToolView from '../views/toolsView';
 import Tool from '../interfaces/toolsInterface';
 import ExtendedObject from '../interfaces/objectThatAcceptsStringIndexes';
 
+const errorNotFound = {
+  error: 'Error',
+  message: 'Tool(s) not Found.'
+}
+
 
 export default {
 
@@ -23,7 +28,7 @@ export default {
 
     // If the database is empty
     if(tools.length == 0){
-      return res.status(404).json({message: 'Tools not found!'});
+      return res.status(404).json(errorNotFound);
     }
 
     return res.json(ToolView.renderMany(tools));
@@ -37,7 +42,7 @@ export default {
 
       // If its not found
       if(tool == null){
-        return res.status(404).json({message: 'Tool not found!'});
+        return res.status(404).json(errorNotFound);
       }
 
       return res.json(ToolView.render(tool));
@@ -75,12 +80,12 @@ export default {
       } as Tool;
 
       const schema = Yup.object().shape({
-        title: Yup.string(),
-        link: Yup.string(),
-        description: Yup.string(),
+        title: Yup.string().min(1),
+        link: Yup.string().min(1),
+        description: Yup.string().min(1),
         tags: Yup.array().of(
           Yup.string()
-        )
+        ).min(1)
       }); 
       await schema.validate(data, {abortEarly: false});
 
@@ -88,7 +93,7 @@ export default {
       const tool = await toolsCollection.findOneAndUpdate({ _id: req.params.id}, {$set: data});
 
       if(tool == null){
-        return res.status(404).json({message: 'Tool not found!'});
+        return res.status(404).json(errorNotFound);
       }
       
       return res.status(200).json(ToolView.render(tool));
@@ -101,7 +106,7 @@ export default {
       const tool = await toolsCollection.deleteOne({ _id: req.params.id });
 
       if(tool.deletedCount == 0){
-        return res.status(404).json({message: 'Tool not found!'});
+        return res.status(404).json(errorNotFound);
       }
 
       return res.status(204).json();

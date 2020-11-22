@@ -9,14 +9,13 @@ import createDatabase from './buildNecessaryDatabase';
 
   // Create the database if there's none.
   // Keep in mind that each environment has its own database.
-  // test: vuttr-test, dev: vuttr-dev, prod: vuttr.
+  // dev: vuttr-dev, prod: vuttr.
   const collectionsIndatabase = await mongoose.connection.db.listCollections().toArray();
-  if(collectionsIndatabase.length == 0){
+  if(collectionsIndatabase.length == 0 && config.envName != 'test'){
     createDatabase();
   }
 
-  // Test has a specific database (minimal) that needs to be
-  // droped every time before the tests.
+  // Drop database for testing enviroment
   if(config.envName == 'test'){
     mongoose.connection.db.dropDatabase();
   }

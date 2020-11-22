@@ -1,0 +1,174 @@
+FORMAT: 1A
+
+# Vuttr
+
+Very Useful Tools to Remember is an API to save your favorites tools.
+
+# Group Tools
+
+Resources related to tools in the API.
+
+## Tool Collection [/tools]
+
+### List All Tools [GET]
+
++ Response 200 (application/json)
+
+        [
+          {
+            "_id": "5fb6777a30e8fd3ef287e17b",
+            "title": "Notion",
+            "link": "https://notion.so",
+            "description": "All in one tool to organize teams and ideas. Write, plan, collaborate, and get organized.",
+            "tags": [
+              "organization",
+              "planning",
+              "collaboration",
+              "writing",
+              "calendar"
+            ]
+          }
+        ]
+
+### Create a New Tool [POST]
+
+You can add your tool using this action. The following parameters are required.
+
++ title (string) - Name of the tool.
++ link (string) - Tool's website.
++ description (string) - Tool's description.
++ tags(array[string]) - A collection of tags related to the tool.
+
++ Request (application/json)
+
+        {
+          "title": "My favorite tool",
+          "link": "https://github.com/facebook/react",
+          "description": "A declarative, efficient, and flexible JavaScript library for building user interfaces.",
+          "tags": [
+            "node", 
+            "javascript", 
+            "frontend", 
+            "react"
+          ]
+        }
+
++ Response 201 (application/json)
+
+  + Headers
+
+            Content-Security-Policy: default-src 'self';base-uri 'self';block-all-mixed-content;font-src 'self' https: data:;frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests
+            X-DNS-Prefetch-Control: off
+            Expect-CT: max-age=0
+            X-Frame-Options: SAMEORIGIN
+            Strict-Transport-Security: max-age=15552000; includeSubDomains
+            X-Download-Options: noopen
+            X-Content-Type-Options: nosniff
+            X-Permitted-Cross-Domain-Policies: none
+            Referrer-Policy: no-referrer
+            X-XSS-Protection: 0
+            Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS
+            Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept
+            Access-Control-Allow-Credentials: true
+            Content-Type: application/json; charset=utf-8
+            Content-Length: 256
+            ETag: W/"100-3khYJRZUToQwG1d5NgwRwrwyI/E"
+            Date: Sun, 22 Nov 2020 11:51:58 GMT
+            Connection: keep-alive
+            Keep-Alive: timeout=5
+
+  + Body
+
+            {
+              "_id": "5fba50de33e7f812d0734a01",
+              "title": "My favorite tool",
+              "link": "https://github.com/facebook/react",
+              "description": "A declarative, efficient, and flexible JavaScript library for building user interfaces.",
+              "tags": [
+                "node",
+                "javascript",
+                "frontend",
+                "react"
+              ]
+            }
+
+## Tool [/tools/{tool_id}]
+
++ Parameters
+  + tool_id (string) - ID of the tool, being a single string of 12 bytes or a string of 24 hex characters.
+
+### View a Tool in Detail [GET]
+
++ Response 200 (application/json)
+
+        {
+          "_id": "5fb6777a30e8fd3ef287e17b",
+          "title": "Notion",
+          "link": "https://notion.so",
+          "description": "All in one tool to organize teams and ideas. Write, plan, collaborate, and get organized.",
+          "tags": [
+            "organization",
+            "planning",
+            "collaboration",
+            "writing",
+            "calendar"
+          ]
+        }
+
+## Update a Tool [PUT]
+
+You can update any tool using this action. The following parameters are optional.
+
++ title (string) - Name of the tool.
++ link (string) - Tool's website.
++ description (string) - Tool's description.
++ tags(array[string]) - A collection of tags related to the tool.
+
++ Request (application/json) 
+
+        {
+          "title": "ReactJS"
+        }
+
++ Response 200 (application/json)
+
+  + Headers
+
+            Content-Security-Policy: default-src 'self';base-uri 'self';block-all-mixed-content;font-src 'self' https: data:;frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests
+            X-DNS-Prefetch-Control: off
+            Expect-CT: max-age=0
+            X-Frame-Options: SAMEORIGIN
+            Strict-Transport-Security: max-age=15552000; includeSubDomains
+            X-Download-Options: noopen
+            X-Content-Type-Options: nosniff
+            X-Permitted-Cross-Domain-Policies: none
+            Referrer-Policy: no-referrer
+            X-XSS-Protection: 0
+            Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS
+            Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept
+            Access-Control-Allow-Credentials: true
+            Content-Type: application/json; charset=utf-8
+            Content-Length: 247
+            ETag: W/"f7-CuiBiMWfNW1XHFDDagJcAmJiyj8"
+            Date: Sun, 22 Nov 2020 12:07:06 GMT
+            Connection: keep-alive
+            Keep-Alive: timeout=5
+
+  + Body
+
+            {
+              "_id": "5fba50de33e7f812d0734a01",
+              "title": "ReactJS",
+              "link": "https://github.com/facebook/react",
+              "description": "A declarative, efficient, and flexible JavaScript library for building user interfaces.",
+              "tags": [
+                "node",
+                "javascript",
+                "frontend",
+                "react"
+              ]
+            }
+
+### Delete a Tool [DELETE]
+
++ Response 204

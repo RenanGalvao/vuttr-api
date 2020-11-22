@@ -23,6 +23,14 @@ environments.production = {
   allowedOrigins: ['https://yourdomain'],
 } as Config;
 
+// Test
+environments.test = {
+  envName: 'test',
+  serverPort: 3000,
+  mongoURL: 'mongodb://localhost:27017/vuttr-test',
+  allowedOrigins: ['http://localhost'],
+} as Config;
+
 // Determine wich environment was passed as a command-line argument if any
 const currentEnvironment = typeof(process.env.NODE_ENV) == 'string' ? process.env.NODE_ENV.toLowerCase() : '';
 

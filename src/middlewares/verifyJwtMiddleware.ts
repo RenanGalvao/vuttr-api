@@ -10,7 +10,10 @@ import fs from 'fs';
 import jwt from 'jsonwebtoken';
 
 export default (req: Request, res: Response, next: NextFunction) => {
-  const errorMessage = 'No authorization token sent.';
+  const errorNotAuthorized = {
+    error: 'Authorization',
+    message: 'No authorization token sent.'
+  };
 
   // Uses Bearer authentication scheme
   if(req.headers.authorization){
@@ -24,13 +27,13 @@ export default (req: Request, res: Response, next: NextFunction) => {
           res.locals.jwt = decoded;
           return next();
         }else{
-          return res.status(401).json({ Error: errorMessage });
+          return res.status(401).json(errorNotAuthorized);
         }
       });
     }else{
-      return res.status(403).json({ Error: errorMessage });
+      return res.status(401).json(errorNotAuthorized);
     }
   }else{
-    return res.status(403).json({ Error: errorMessage });
+    return res.status(401).json(errorNotAuthorized);
   }
 };
