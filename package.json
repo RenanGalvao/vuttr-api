@@ -7,7 +7,7 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "start": "set NODE_ENV=development && node dist/app",
+    "start": "set NODE_ENV=production && node dist/app",
     "dev": "set NODE_ENV=development && ./node_modules/.bin/ts-node-dev --transpile-only --ignore-watch node_modules src/app.ts",
     "test": "set NODE_ENV=test && mocha --recursive --exit -r ts-node/register \"./test/**/*.ts\"",
     "build": "tsc"
