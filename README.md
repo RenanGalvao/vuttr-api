@@ -34,7 +34,7 @@ yarn dev
 ```
 
 ## Adding or Removing Tools
-The first step is to create a credential. Send a POST request to localhost:3000/first-time with these fields (only in development enviroment):
+The first step is to create a credential. Send a `POST` request to `localhost:3000/first-time` with these fields (only in development enviroment):
 ```json
 {
   "name": "your name",
@@ -42,7 +42,7 @@ The first step is to create a credential. Send a POST request to localhost:3000/
   "password": "your password"
 }
 ```
-After that, log in and retrieve the JWT token. Send a POST request to localhost:3000/login with these fields:
+After that, log in and retrieve the JWT token. Send a `POST` request to `localhost:3000/login` with these fields:
 ```json
 {
   "email": "your email",
@@ -57,29 +57,29 @@ Your response (If your credentials are correct) will be something like this:
   "token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.e..."
 }
 ```
-Use this token in all subsequents requests as Bearer token, it expires in 1 hour. If for any reason you have lost your access, send a DELETE request to /drop-database/yes (only in development enviroment). Then restart the application and you will be able to create another credential following the previous steps.
+Use this token in all subsequents requests as Bearer token, it expires in 1 hour. If for any reason you have lost your access, send a `DELETE` request to `/drop-database/yes` (only in development enviroment). Then restart the application and you will be able to create another credential following the previous steps.
 
-You can now add a tool via the API. Send a POST request to localhost:3000/tools:
+You can now add a tool via the API. Send a `POST` request to `localhost:3000/tools`:
 ```json
 {
   "title": "title",
   "link": "link",
-  "description:": "description",
+  "description": "description",
   "tags": ["tag1", "tag2"]
 }
 ```
 
 ## API Routes
 ```
-POST /first-time -> Creates a user for authentication purposes
-POST /login -> Retrieves the JWT token
-POST /drop-database/yes -> Deletes the current database (if you have forgotten your email and/or password)
+[POST] /first-time -> Creates a user for authentication purposes
+[POST] /login -> Retrieves the JWT token
+[DELETE] /drop-database/yes -> Deletes the current database (if you have forgotten your email and/or password)
 
-GET /tools -> Returns all tools saved
-GET /tools/:id -> Returns a specific tool
-POST /tools -> Saves a new tool
-PUT /tools/:id -> Updates a specific tool
-DELETE /tools/:id -> Removes a specific tool
+[GET] /tools -> Returns all tools saved
+[GET] /tools/:id -> Returns a specific tool
+[POST] /tools -> Saves a new tool
+[PUT] /tools/:id -> Updates a specific tool
+[DELETE] /tools/:id -> Removes a specific tool
 ```
 
 For more information on the tools route, read [vuttr-blueprint.apib](https://github.com/RenanGalvao/vuttr-api/blob/master/vuttr-blueprint.apib).
