@@ -33,8 +33,8 @@ app.use(express.json());
 app.use(routes.tools);
 app.use(routes.authentication);
 
-// The next two routes are only available in development enviroment for security reasons
-if(config.envName == 'development'){
+// The next two routes are only available in development/test enviroment for security reasons
+if(config.envName == 'development' || config.envName == 'test'){
   app.use(routes.dropDatabase);
 
   // Only available if there is no user in the database, otherwise sends 403

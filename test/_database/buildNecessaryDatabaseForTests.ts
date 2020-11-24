@@ -1,8 +1,6 @@
 import mongoose from 'mongoose';
-import bcrypt from 'bcrypt';
 import '../../src/database/connection';
 
-import UserSchema from '../../src/schemas/usersSchema';
 import User from '../../src/interfaces/usersInterface';
 
 import ToolsSchema from '../../src/schemas/toolsSchema';
