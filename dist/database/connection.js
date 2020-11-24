@@ -25,9 +25,9 @@ const buildNecessaryDatabase_1 = __importDefault(require("./buildNecessaryDataba
     }
     // Create the database if there's none.
     // Keep in mind that each environment has its own database.
-    // test: vuttr-test, dev: vuttr-dev, prod: vuttr.
+    // test: vuttr-test, dev: vuttr-dev, prod: vuttr. 
     const collectionsIndatabase = yield mongoose_1.default.connection.db.listCollections().toArray();
-    if (collectionsIndatabase.length == 0) {
+    if (collectionsIndatabase.length == 0 && main_1.default.envName !== 'test') {
         buildNecessaryDatabase_1.default();
     }
 }))();
