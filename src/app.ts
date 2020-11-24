@@ -1,7 +1,6 @@
 import express, { Request, Response, NextFunction } from 'express';
 import 'express-async-errors';
 import helmet from 'helmet';
-import mongoose from 'mongoose';
 
 import './database/connection';
 import errorHandler from './errors/handler';
@@ -34,8 +33,8 @@ app.use(express.json());
 app.use(routes.tools);
 app.use(routes.authentication);
 
-// The next two routes are only available in dev/test enviroment for security reasons
-if(config.envName == 'development' || config.envName == 'test'){
+// The next two routes are only available in development enviroment for security reasons
+if(config.envName == 'development'){
   app.use(routes.dropDatabase);
 
   // Only available if there is no user in the database, otherwise sends 403

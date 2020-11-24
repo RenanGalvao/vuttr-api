@@ -4,7 +4,7 @@
 * 
 * Use this middleware on every route that requires authentication.
 */
-import {Request, Response, NextFunction } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import path from 'path';
 import fs from 'fs';
 import jwt from 'jsonwebtoken';

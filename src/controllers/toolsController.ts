@@ -8,7 +8,7 @@ import ExtendedObject from '../interfaces/objectThatAcceptsStringIndexes';
 
 const errorNotFound = {
   error: 'Error',
-  message: 'Tool(s) not Found.'
+  message: 'Tool(s) not found.'
 }
 
 
@@ -19,10 +19,10 @@ export default {
     // Filters the search result using keys and values ​​sent by the query string
     let queryObj = {} as ExtendedObject;
     for(let i = 0; i < Object.keys(req.query).length; i++){
-      // Create key and value pairs that will be used next
-      queryObj[Object.keys(req.query)[i]] = Object.values(req.query)[i];
+      // Create key and value pairs that will be used next, using regex for a more loose search
+      queryObj[Object.keys(req.query)[i]] = { $regex: `${Object.values(req.query)[i]}`, $options: 'i'};
     }
-
+    
     const toolsCollection = mongoose.model<Tool>('tools', ToolsSchema);
     const tools = await toolsCollection.find(queryObj);
 

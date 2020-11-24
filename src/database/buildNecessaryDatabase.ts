@@ -20,7 +20,7 @@ export default function createDatabase(): void {
       'calendar',
     ],
   }, {
-    title: 'json-server',
+    title: 'Json-Server',
     link: 'https://github.com/typicode/json-server',
     description: 'Fake REST API based on a json schema. Useful for mocking and creating APIs for front-end devs to consume in coding challenges.',
     tags: [
@@ -32,7 +32,7 @@ export default function createDatabase(): void {
       'rest',
     ],
   }, {
-    title: 'fastify',
+    title: 'Fastify',
     link: 'https://www.fastify.io/',
     description: 'Extremely fast and simple, low-overhead web framework for NodeJS. Supports HTTP2.',
     tags: [
