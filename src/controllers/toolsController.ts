@@ -4,34 +4,20 @@ import * as Yup from 'yup';
 import ToolsSchema from '../schemas/toolsSchema';
 import ToolView from '../views/toolsView';
 import Tool from '../interfaces/toolsInterface';
-import ExtendedObject from '../interfaces/objectThatAcceptsStringIndexes';
-
-const errorNotFound = {
-  error: 'Error',
-  message: 'Tool(s) not found.'
-}
-
+import { createFilter } from '../lib/helpers'
 
 export default {
 
   // Returns all route data or according to the filter
   async index(req: Request, res: Response){
-    // Filters the search result using keys and values ​​sent by the query string
-    let queryObj = {} as ExtendedObject;
-    for(let i = 0; i < Object.keys(req.query).length; i++){
-      // Create key and value pairs that will be used next, using regex for a more loose search
-      queryObj[Object.keys(req.query)[i]] = { $regex: `${Object.values(req.query)[i]}`, $options: 'i'};
-    }
     
+    // Get filters if any
+    const { skip, limit, order, field, queryConditions } = createFilter(req.query);
     const toolsCollection = mongoose.model<Tool>('tools', ToolsSchema);
-    const tools = await toolsCollection.find(queryObj);
+    const tools = await toolsCollection.find(queryConditions).limit(limit).skip(skip).sort({[field]: order});;
 
-    // If the database is empty
-    if(tools.length == 0){
-      return res.status(404).json(errorNotFound);
-    }
-
-    return res.json(ToolView.renderMany(tools));
+    res.setHeader('X-Total-Count', tools.length);
+    return ToolView(tools, req, res);
   },
 
   async show(req: Request, res: Response){
@@ -40,12 +26,7 @@ export default {
       const toolsCollection = mongoose.model<Tool>('tools', ToolsSchema);
       const tool = await toolsCollection.findOne({ _id: req.params.id });
 
-      // If its not found
-      if(tool == null){
-        return res.status(404).json(errorNotFound);
-      }
-
-      return res.json(ToolView.render(tool));
+      return ToolView(tool, req, res);
     }
   },
 
@@ -70,7 +51,7 @@ export default {
     const toolsCollection = mongoose.model<Tool>('tools', ToolsSchema);
     const tool = await toolsCollection.create(data);
   
-    return res.status(201).json(ToolView.render(tool));
+    return ToolView(tool, req, res);
   },
 
   async update(req: Request, res: Response){
@@ -92,11 +73,7 @@ export default {
       const toolsCollection = mongoose.model<Tool>('tools', ToolsSchema);
       const tool = await toolsCollection.findOneAndUpdate({ _id: req.params.id}, {$set: data});
 
-      if(tool == null){
-        return res.status(404).json(errorNotFound);
-      }
-      
-      return res.status(200).json(ToolView.render(tool));
+      return ToolView(tool, req, res);
     }
   },
 
@@ -105,11 +82,12 @@ export default {
       const toolsCollection = mongoose.model<Tool>('tools', ToolsSchema);
       const tool = await toolsCollection.deleteOne({ _id: req.params.id });
 
-      if(tool.deletedCount == 0){
-        return res.status(404).json(errorNotFound);
-      }
-
-      return res.status(204).json();
+      return res.status(204).end();
     }
   }
 };
+
+const errorNotFound = {
+  error: 'Error',
+  message: 'Tool(s) not found.'
+}

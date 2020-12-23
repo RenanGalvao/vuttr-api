@@ -7,13 +7,11 @@
 import { ErrorRequestHandler } from 'express';
 import { ValidationError } from 'yup';
 
-import ExtendedObject from '../interfaces/objectThatAcceptsStringIndexes';
-
 const errorHandler:ErrorRequestHandler = (error, request, response, next) => {
     
   // Create an error(s) object based on Yup's validation fails
   if(error instanceof ValidationError){
-    let errors: ExtendedObject = {};
+    let errors = Object();
     error.inner.forEach(err => {
       errors[err.path] = err.errors;
     });

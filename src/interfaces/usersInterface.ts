@@ -6,4 +6,6 @@ export default interface Tool extends Document {
   name?: string;
   email?: string;
   password?: string;
+  created_at?: string;
+  updated_at?: string;
 };

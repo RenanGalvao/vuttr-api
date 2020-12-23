@@ -1,11 +1,10 @@
-import ExtendedObject from '../interfaces/objectThatAcceptsStringIndexes';
 import Config from '../interfaces/configInterface';
+import path from 'path';
+import dotenv from 'dotenv';
+dotenv.config({path: path.join(path.resolve('configs'), '..', '.env')});
 
 // Container for all the environments
-let environments = {
-  development: {},
-  production: {},
-} as ExtendedObject;
+let environments = Object();
 
 // Development (default)
 environments.development = {
@@ -19,7 +18,7 @@ environments.development = {
 environments.production = {
   envName: 'production',
   serverPort: 3000,
-  mongoURL: 'mongodb://username:password@host:port/vuttr',
+  mongoURL: `mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@${process.env.MONGO_HOST}:${process.env.MONGO_PORT}/vuttr`,
   allowedOrigins: ['https://yourdomain'],
 } as Config;
 

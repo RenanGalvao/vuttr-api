@@ -31,7 +31,6 @@ export default {
       return res.status(404).json({ auth: false });
 
     }else{
-
       // Test for the password because the user interface says the password is optional
       // In the Mongo scheme it is not, it is in this way to use the same interface in PUT
       if(user.password !== undefined){
@@ -43,19 +42,18 @@ export default {
           // Configure the JWT token to be sent to the user
           const payload = { userId: user._id };
           const privateKey = fs.readFileSync(path.join(__dirname, '..', '..', 'keys', 'private.pen'));
-          const options = { algorithm: 'RS256', expiresIn: '1h'} as jwt.SignOptions;
+          const acess_options = { algorithm: 'RS256', expiresIn: '1h'} as jwt.SignOptions;
+          const refresh_options = { algorithm: 'RS256', expiresIn: '2h'} as jwt.SignOptions;
 
-          jwt.sign(payload, privateKey, options, (err, token) => {
-            if(!err && token){
-              return res.status(200).json({ auth: true, token });
-            }
-          });
+          const acess_token =  jwt.sign(payload, privateKey, acess_options);
+          const refresh_token = jwt.sign(payload, privateKey, refresh_options);
+          
+
+          return res.status(201).json({ auth: true, acess_token, refresh_token });
 
         }else{
-
           // Wrong password
           return res.status(401).json({ auth: false });
-
         }
       }
     }
