@@ -1,12 +1,11 @@
 /*
 * Mongoose connection options
 */
-import { ConnectionOptions } from 'mongoose';
 
-export default {
+module.exports =  {
   keepAlive: true, 
   keepAliveInitialDelay: 300000,
   useNewUrlParser: true,
   useFindAndModify: false,
   useUnifiedTopology: true,
-} as ConnectionOptions;
+};

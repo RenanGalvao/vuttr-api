@@ -1,7 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = require("mongoose");
-exports.default = new mongoose_1.Schema({
+// This import is necessary for the connection to be shared through the mongoose object
+require("../database/connection");
+const toolSchema = new mongoose_1.Schema({
     title: { type: String, trim: true, required: true },
     link: { type: String, trim: true, required: true },
     description: { type: String, trim: true, required: true },
@@ -13,3 +15,11 @@ exports.default = new mongoose_1.Schema({
         updatedAt: 'updated_at',
     },
 });
+let toolCollection;
+try {
+    toolCollection = mongoose_1.model('tools', toolSchema);
+}
+catch (_a) {
+    toolCollection = mongoose_1.model('tools');
+}
+exports.default = toolCollection;

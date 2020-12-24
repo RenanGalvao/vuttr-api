@@ -33,42 +33,27 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
 const Yup = __importStar(require("yup"));
-const toolsSchema_1 = __importDefault(require("../schemas/toolsSchema"));
+const toolModel_1 = __importDefault(require("../models/toolModel"));
 const toolsView_1 = __importDefault(require("../views/toolsView"));
-const errorNotFound = {
-    error: 'Error',
-    message: 'Tool(s) not found.'
-};
+const helpers_1 = require("../lib/helpers");
 exports.default = {
     // Returns all route data or according to the filter
     index(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            // Filters the search result using keys and values ​​sent by the query string
-            let queryObj = {};
-            for (let i = 0; i < Object.keys(req.query).length; i++) {
-                // Create key and value pairs that will be used next, using regex for a more loose search
-                queryObj[Object.keys(req.query)[i]] = { $regex: `${Object.values(req.query)[i]}`, $options: 'i' };
-            }
-            const toolsCollection = mongoose_1.default.model('tools', toolsSchema_1.default);
-            const tools = yield toolsCollection.find(queryObj);
-            // If the database is empty
-            if (tools.length == 0) {
-                return res.status(404).json(errorNotFound);
-            }
-            return res.json(toolsView_1.default.renderMany(tools));
+            // Get filters if any
+            const { skip, limit, order, field, queryConditions } = helpers_1.createFilter(req.query);
+            const tools = yield toolModel_1.default.find(queryConditions).limit(limit).skip(skip).sort({ [field]: order });
+            ;
+            res.setHeader('X-Total-Count', tools.length);
+            return toolsView_1.default(tools, req, res);
         });
     },
     show(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             // Argument passed in must be a single String of 12 bytes or a string of 24 hex characters
             if (mongoose_1.default.Types.ObjectId.isValid(new mongoose_1.default.Types.ObjectId(req.params.id))) {
-                const toolsCollection = mongoose_1.default.model('tools', toolsSchema_1.default);
-                const tool = yield toolsCollection.findOne({ _id: req.params.id });
-                // If its not found
-                if (tool == null) {
-                    return res.status(404).json(errorNotFound);
-                }
-                return res.json(toolsView_1.default.render(tool));
+                const tool = yield toolModel_1.default.findOne({ _id: req.params.id });
+                return toolsView_1.default(tool, req, res);
             }
         });
     },
@@ -84,9 +69,8 @@ exports.default = {
                 tags: Yup.array().of(Yup.string()).required()
             });
             yield schema.validate(data, { abortEarly: false });
-            const toolsCollection = mongoose_1.default.model('tools', toolsSchema_1.default);
-            const tool = yield toolsCollection.create(data);
-            return res.status(201).json(toolsView_1.default.render(tool));
+            const tool = yield toolModel_1.default.create(data);
+            return toolsView_1.default(tool, req, res);
         });
     },
     update(req, res) {
@@ -100,25 +84,21 @@ exports.default = {
                     tags: Yup.array().of(Yup.string()).min(1)
                 });
                 yield schema.validate(data, { abortEarly: false });
-                const toolsCollection = mongoose_1.default.model('tools', toolsSchema_1.default);
-                const tool = yield toolsCollection.findOneAndUpdate({ _id: req.params.id }, { $set: data });
-                if (tool == null) {
-                    return res.status(404).json(errorNotFound);
-                }
-                return res.status(200).json(toolsView_1.default.render(tool));
+                const tool = yield toolModel_1.default.findOneAndUpdate({ _id: req.params.id }, { $set: data });
+                return toolsView_1.default(tool, req, res);
             }
         });
     },
     remove(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             if (mongoose_1.default.Types.ObjectId.isValid(new mongoose_1.default.Types.ObjectId(req.params.id))) {
-                const toolsCollection = mongoose_1.default.model('tools', toolsSchema_1.default);
-                const tool = yield toolsCollection.deleteOne({ _id: req.params.id });
-                if (tool.deletedCount == 0) {
-                    return res.status(404).json(errorNotFound);
-                }
-                return res.status(204).json();
+                const tool = yield toolModel_1.default.deleteOne({ _id: req.params.id });
+                return res.status(204).end();
             }
         });
     }
+};
+const errorNotFound = {
+    error: 'Error',
+    message: 'Tool(s) not found.'
 };

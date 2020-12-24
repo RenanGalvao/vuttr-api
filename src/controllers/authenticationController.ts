@@ -1,15 +1,20 @@
 import { Request, Response } from 'express';
-import mongoose from 'mongoose';
 import * as Yup from 'yup';
 import path from 'path';
 import fs from 'fs';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import UserSchema from '../schemas/usersSchema';
+import userCollection from '../models/userModel';
 import User from '../interfaces/usersInterface';
+import { debuglog, formatWithOptions } from 'util';
+
+// Setting debug name for the file
+const debug = debuglog('login');
+
 
 export default {
   async verify(req: Request, res: Response){
+    debug(formatWithOptions({colors: true}, '[LOGIN] Request Body: %O', req.body));
 
     // Recover data in User format
     const data = {
@@ -23,8 +28,7 @@ export default {
     }); 
     await schema.validate(data, {abortEarly: false});
 
-    const usersCollection = mongoose.model<User>('users', UserSchema);
-    const user = await usersCollection.findOne({ email: data.email});
+    const user = await userCollection.findOne({ email: data.email });
 
     if(!user) {
 

@@ -16,13 +16,14 @@ export default function UserView(data: User | User[] | null, req: ExtendedReques
     return res.json(renderMany(data, req));
   }
   else{
-    return res.json(render(data, req));
+    const status = req.method == 'POST' ? 201 : req.method == 'DELETE' ? 204 : 200;
+    return res.status(status).json(render(data, req));
   }
   
 };
 
 const errorNotFound = {
-  err: 'Error',
+  error: 'Error',
   message: 'User(s) not found.',
 };
 

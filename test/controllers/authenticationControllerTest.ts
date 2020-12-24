@@ -2,8 +2,6 @@ import chai from 'chai';
 import chaiHttp from 'chai-http';
 import app from '../../src/app';
 import User from '../../src/interfaces/usersInterface';
-// @ts-ignore
-import { userCredentials } from '../_database/buildNecessaryDatabaseForTests';
 
 const expect = chai.expect;
 chai.use(chaiHttp);
@@ -11,6 +9,11 @@ chai.use(chaiHttp);
 /*
 * Variables used in tests
 */
+const userCredentials = {
+  email: 'admin@dev.com',
+  password: 'admin',
+};
+
 const invalidPostData = {
   email: '',
   password: '',
@@ -32,15 +35,16 @@ describe('Authentication Controller', () => {
 
   describe('/login [POST]', () => {
 
-    it('Request to /login with valid body, should res with auth and 200 status', done => {
+    it('Request to /login with valid body, should res with auth and 201 status', done => {
 
       chai.request(app).post('/login').send(userCredentials).end((err, res) => {
 
-        expect(res).to.have.status(200);
+        expect(res).to.have.status(201);
         expect(res).to.have.property('type', 'application/json');
         expect(res.body).to.be.a('object');
         expect(res.body).to.have.property('auth', true);
-        expect(res.body).to.have.property('token');
+        expect(res.body).to.have.property('acess_token');
+        expect(res.body).to.have.property('refresh_token');
 
         done();
       });

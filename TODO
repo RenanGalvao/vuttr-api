@@ -1,6 +1,3 @@
-- Jogar o o model todo pro Schema (observar como é feita a configuração no wm-web)
-- retirar rota para criar usuário ou apagar banco de dados, usar migrate-mongo
 - testar multiplos domains
 - trocar os testes pelo jest
-- na autenticação deixar fazer com que seja enviado o acess_token e o refresh_token para o front
 - webpack para dist?

@@ -2,8 +2,6 @@ import chai from 'chai';
 import chaiHttp from 'chai-http';
 import app from '../../src/app';
 import Tool from '../../src/interfaces/toolsInterface';
-// @ts-ignore
-import { userCredentials } from '../_database/buildNecessaryDatabaseForTests';
 
 const expect = chai.expect;
 chai.use(chaiHttp);
@@ -12,6 +10,11 @@ chai.use(chaiHttp);
 /*
 * Variables used in tests
 */
+const userCredentials = {
+  email: 'admin@dev.com',
+  password: 'admin',
+};
+
 const validPostData = {
   title: 'screwdriver',
   link: 'Tool box',
@@ -56,7 +59,7 @@ describe('Tools Controller WITHOUT credentials', () => {
         expect(res.body).to.be.a('array');
 
 
-        toolID = res.body[0]._id;
+        toolID = res.body[0].id;
         done();
       });
     });
@@ -68,7 +71,7 @@ describe('Tools Controller WITHOUT credentials', () => {
         expect(res).to.have.status(200);
         expect(res).to.have.property('type', 'application/json');
         expect(res.body).to.be.a('object');
-        expect(res.body).to.have.property('_id');
+        expect(res.body).to.have.property('id');
         expect(res.body).to.have.property('title');
         expect(res.body).to.have.property('link');
         expect(res.body).to.have.property('description');
@@ -171,7 +174,7 @@ describe('Tools Controller WITH credentials', () => {
   before(async () => {
 
     const res = await chai.request(app).post('/login').send(userCredentials);
-    authHeader.Authorization = `Bearer ${res.body.token}`;
+    authHeader.Authorization = `Bearer ${res.body.acess_token}`;
   });
 
   describe('/tools [POST]', () => {
@@ -183,7 +186,7 @@ describe('Tools Controller WITH credentials', () => {
         expect(res).to.have.status(201);
         expect(res).to.have.property('type', 'application/json');
         expect(res.body).to.be.a('object');
-        expect(res.body).to.have.property('_id');
+        expect(res.body).to.have.property('id');
         expect(res.body).to.have.property('title');
         expect(res.body).to.have.property('link');
         expect(res.body).to.have.property('description');
@@ -191,7 +194,7 @@ describe('Tools Controller WITH credentials', () => {
         expect(res.body).to.not.have.property('created_at');
         expect(res.body).to.not.have.property('updated_at');
 
-        toolID = res.body._id;
+        toolID = res.body.id;
         done();
       });
     });
@@ -224,7 +227,7 @@ describe('Tools Controller WITH credentials', () => {
         expect(res).to.have.status(200);
         expect(res).to.have.property('type', 'application/json');
         expect(res.body).to.be.a('object');
-        expect(res.body).to.have.property('_id');
+        expect(res.body).to.have.property('id');
         expect(res.body).to.have.property('title');
         expect(res.body).to.have.property('link');
         expect(res.body).to.have.property('description');
@@ -293,15 +296,12 @@ describe('Tools Controller WITH credentials', () => {
       });
     });
 
-    it('Request to /tools/:non_existent_id, should res with error and 404 status', done => {
+    it('Request to /tools/:non_existent_id, should res with error and 204 status', done => {
 
       chai.request(app).delete(`/tools/${nonExistentId}`).set(authHeader).end((err, res) => {
 
-        expect(res).to.have.status(404);
-        expect(res).to.have.property('type', 'application/json');
-        expect(res.body).to.be.a('object');
-        expect(res.body).to.have.property('error');
-        expect(res.body).to.have.property('message');
+        expect(res).to.have.status(204);
+        expect(res.body).to.be.empty;
 
         done();
       });

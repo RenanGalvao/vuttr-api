@@ -9,7 +9,7 @@ const yup_1 = require("yup");
 const errorHandler = (error, request, response, next) => {
     // Create an error(s) object based on Yup's validation fails
     if (error instanceof yup_1.ValidationError) {
-        let errors = {};
+        let errors = Object();
         error.inner.forEach(err => {
             errors[err.path] = err.errors;
         });

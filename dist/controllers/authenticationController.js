@@ -31,16 +31,19 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const mongoose_1 = __importDefault(require("mongoose"));
 const Yup = __importStar(require("yup"));
 const path_1 = __importDefault(require("path"));
 const fs_1 = __importDefault(require("fs"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const usersSchema_1 = __importDefault(require("../schemas/usersSchema"));
+const userModel_1 = __importDefault(require("../models/userModel"));
+const util_1 = require("util");
+// Setting debug name for the file
+const debug = util_1.debuglog('login');
 exports.default = {
     verify(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
+            debug(util_1.formatWithOptions({ colors: true }, '[LOGIN] Request Body: %O', req.body));
             // Recover data in User format
             const data = Object.assign({}, req.body);
             // Checks whether the data sent is valid
@@ -49,8 +52,7 @@ exports.default = {
                 password: Yup.string().required().trim()
             });
             yield schema.validate(data, { abortEarly: false });
-            const usersCollection = mongoose_1.default.model('users', usersSchema_1.default);
-            const user = yield usersCollection.findOne({ email: data.email });
+            const user = yield userModel_1.default.findOne({ email: data.email });
             if (!user) {
                 return res.status(404).json({ auth: false });
             }
@@ -63,12 +65,11 @@ exports.default = {
                         // Configure the JWT token to be sent to the user
                         const payload = { userId: user._id };
                         const privateKey = fs_1.default.readFileSync(path_1.default.join(__dirname, '..', '..', 'keys', 'private.pen'));
-                        const options = { algorithm: 'RS256', expiresIn: '1h' };
-                        jsonwebtoken_1.default.sign(payload, privateKey, options, (err, token) => {
-                            if (!err && token) {
-                                return res.status(200).json({ auth: true, token });
-                            }
-                        });
+                        const acess_options = { algorithm: 'RS256', expiresIn: '1h' };
+                        const refresh_options = { algorithm: 'RS256', expiresIn: '2h' };
+                        const acess_token = jsonwebtoken_1.default.sign(payload, privateKey, acess_options);
+                        const refresh_token = jsonwebtoken_1.default.sign(payload, privateKey, refresh_options);
+                        return res.status(201).json({ auth: true, acess_token, refresh_token });
                     }
                     else {
                         // Wrong password
