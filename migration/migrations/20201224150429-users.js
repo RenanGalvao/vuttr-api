@@ -6,6 +6,8 @@ module.exports = {
       name: 'Admin',
       email: 'admin@dev.com',
       password: await bcrypt.hash('admin', 10),
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(), 
     });
   },
 

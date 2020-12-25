@@ -7,14 +7,17 @@ import jwt from 'jsonwebtoken';
 import userCollection from '../models/userModel';
 import User from '../interfaces/usersInterface';
 import { debuglog, formatWithOptions } from 'util';
+import JWT from '../interfaces/jwtInterface';
 
 // Setting debug name for the file
-const debug = debuglog('login');
+const debug = debuglog('auth');
 
 
 export default {
+
+  // [POST]
   async verify(req: Request, res: Response){
-    debug(formatWithOptions({colors: true}, '[LOGIN] Request Body: %O', req.body));
+    debug(formatWithOptions({colors: true}, '[AUTH][POST] Request Body: %O\nResponse Locals: %O', req.body, res.locals));
 
     // Recover data in User format
     const data = {
@@ -44,7 +47,12 @@ export default {
         if(auth){
 
           // Configure the JWT token to be sent to the user
-          const payload = { userId: user._id };
+          const payload = { 
+            userId: user._id,
+            userEmail: user.email,
+            userName: user.name, 
+          } as JWT;
+
           const privateKey = fs.readFileSync(path.join(__dirname, '..', '..', 'keys', 'private.pen'));
           const acess_options = { algorithm: 'RS256', expiresIn: '1h'} as jwt.SignOptions;
           const refresh_options = { algorithm: 'RS256', expiresIn: '2h'} as jwt.SignOptions;
@@ -52,9 +60,7 @@ export default {
           const acess_token =  jwt.sign(payload, privateKey, acess_options);
           const refresh_token = jwt.sign(payload, privateKey, refresh_options);
           
-
           return res.status(201).json({ auth: true, acess_token, refresh_token });
-
         }else{
           // Wrong password
           return res.status(401).json({ auth: false });

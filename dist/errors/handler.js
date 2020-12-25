@@ -6,7 +6,11 @@
 */
 Object.defineProperty(exports, "__esModule", { value: true });
 const yup_1 = require("yup");
-const errorHandler = (error, request, response, next) => {
+const util_1 = require("util");
+// Setting debug name for the file
+const debug = util_1.debuglog('errors');
+const errorHandler = (error, req, res, next) => {
+    debug(util_1.formatWithOptions({ colors: true }, '[ERRORS] Error: %O\nRequest Body: %O\nResponse Locals:', error, req.body, res.locals));
     // Create an error(s) object based on Yup's validation fails
     if (error instanceof yup_1.ValidationError) {
         let errors = Object();
@@ -18,12 +22,11 @@ const errorHandler = (error, request, response, next) => {
                 [error.path]: [error.message]
             };
         }
-        return response.status(400).json({ message: 'Validation fails', errors });
+        return res.status(400).json({ message: 'Validation fails', errors });
     }
     else if (error.message == 'Argument passed in must be a single String of 12 bytes or a string of 24 hex characters') {
-        return response.status(400).json({ message: error.message, error: error.name });
+        return res.status(400).json({ message: error.message, error: error.name });
     }
-    console.error(error);
-    return response.status(500).json({ message: 'Internal server error' });
+    return res.status(500).json({ message: 'Internal server error' });
 };
 exports.default = errorHandler;

@@ -3,21 +3,36 @@
 * if you want something not to go to the user, just omit the object's key and value.
 */
 import Tool from '../interfaces/toolsInterface';
-import { Response } from 'express';
-import ExtendedRequest from '../interfaces/extendedRequestInterface';
+import { Request, Response } from 'express';
 import { isAuthorized } from '../lib/helpers';
+import { debuglog, formatWithOptions } from 'util';
 
-export default function ToolView(data: Tool | Tool[] | null, req: ExtendedRequest, res: Response) {
+// Setting debug name for the file
+const debug = debuglog('tools-view');
+
+export default function ToolView(data: Tool | Tool[] | null, req: Request, res: Response) {
+  debug(formatWithOptions({colors: true}, '[TOOL_VIEW][INPUT] Data: %O\nRequest Method: %O\nResponse Locals: %O', data, req.method, res.locals));
+
+  // Does the user has a valid jwt?
+  let isUserAuthorized = isAuthorized(res);
+
   // If empty
   if(data == null || data instanceof Array && data.length == 0){
+    debug(formatWithOptions({colors: true}, '[TOOL_VIEW][OUTPUT] Status: %O \n JSON: %O', 404, errorNotFound));
     return res.status(404).json(errorNotFound);
   }
+  // Array
   else if(data instanceof Array){
-    return res.json(renderMany(data, req));
+    const jsonResponse = renderMany(data, isUserAuthorized);
+    debug(formatWithOptions({colors: true}, '[TOOL_VIEW][OUTPUT] Status: %O \n JSON: %O', 200, jsonResponse));
+    return res.json(jsonResponse);
   }
+  // One
   else{
     const status = req.method == 'POST' ? 201 : req.method == 'DELETE' ? 204 : 200;
-    return res.status(status).json(render(data, req));
+    const jsonResponse = render(data, isUserAuthorized);
+    debug(formatWithOptions({colors: true}, '[TOOL_VIEW][OUTPUT] Status: %O \n JSON: %O', status, jsonResponse));
+    return res.status(status).json(jsonResponse);
   }
   
 };
@@ -27,11 +42,11 @@ const errorNotFound = {
   message: 'Tool(s) not found.',
 };
 
-function renderMany(tools: Tool[], req: ExtendedRequest){
-  return tools.map(tool => render(tool, req));
+function renderMany(tools: Tool[], isAuthorized: boolean){
+  return tools.map(tool => render(tool, isAuthorized));
 }
 
-function render(tool: Tool | null, req: ExtendedRequest){
+function render(tool: Tool | null, isAuthorized: boolean){
   let viewObj = {
     id: tool?._id,
     title: tool?.title,
@@ -40,7 +55,7 @@ function render(tool: Tool | null, req: ExtendedRequest){
     tags: tool?.tags,
   } as Tool;
 
-  if(isAuthorized(req)){
+  if(isAuthorized){
     viewObj = {
       ...viewObj,
       created_at: tool?.created_at,

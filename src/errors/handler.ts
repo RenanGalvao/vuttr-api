@@ -6,8 +6,13 @@
 
 import { ErrorRequestHandler } from 'express';
 import { ValidationError } from 'yup';
+import { debuglog, formatWithOptions } from 'util';
 
-const errorHandler:ErrorRequestHandler = (error, request, response, next) => {
+// Setting debug name for the file
+const debug = debuglog('errors');
+
+const errorHandler:ErrorRequestHandler = (error, req, res, next) => {
+  debug(formatWithOptions({colors: true}, '[ERRORS] Error: %O\nRequest Body: %O\nResponse Locals:', error, req.body, res.locals));
     
   // Create an error(s) object based on Yup's validation fails
   if(error instanceof ValidationError){
@@ -22,16 +27,15 @@ const errorHandler:ErrorRequestHandler = (error, request, response, next) => {
       };
     }
 
-    return response.status(400).json({message: 'Validation fails', errors});
+    return res.status(400).json({message: 'Validation fails', errors});
     
   }else if(error.message == 'Argument passed in must be a single String of 12 bytes or a string of 24 hex characters'){
 
-    return response.status(400).json({message: error.message, error: error.name});
+    return res.status(400).json({message: error.message, error: error.name});
 
   }
 
-  console.error(error);
-  return response.status(500).json({message: 'Internal server error'});
+  return res.status(500).json({message: 'Internal server error'});
 };
 
 export default errorHandler;

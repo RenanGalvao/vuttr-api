@@ -48,6 +48,7 @@ app.use(function (req, res, next) {
 app.use(express_1.default.json());
 // Routes
 app.use(routes.tools);
+app.use(routes.users);
 app.use(routes.authentication);
 // Error handling as middleware (catches all errors in app)
 app.use(handler_1.default);

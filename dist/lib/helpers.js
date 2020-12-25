@@ -12,11 +12,17 @@ var __rest = (this && this.__rest) || function (s, e) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createFilter = exports.isAuthorized = void 0;
-function isAuthorized(req) {
-    if (req.locals && typeof req.locals.jwt === 'object' && Object.keys(req.locals.jwt).length >= 1) {
+const util_1 = require("util");
+// Setting debug name for the file
+const debug = util_1.debuglog('helpers');
+function isAuthorized(res) {
+    debug(util_1.formatWithOptions({ colors: true }, '[IS_AUTHORIZED][INPUT] Response Locals: %O', res.locals));
+    if (res.locals && typeof res.locals.jwt === 'object' && Object.keys(res.locals.jwt).length >= 1) {
+        debug(util_1.formatWithOptions({ colors: true }, '[IS_AUTHORIZED][OUTPUT] Boolean: %O', true));
         return true;
     }
     else {
+        debug(util_1.formatWithOptions({ colors: true }, '[IS_AUTHORIZED][OUTPUT] Boolean: %O', false));
         return false;
     }
 }
@@ -24,8 +30,10 @@ exports.isAuthorized = isAuthorized;
 // Creates a filter object from request.query
 // _start = skip, _end = limit, ,_sort = field, _order = asc/desc 
 function createFilter(query) {
+    debug(util_1.formatWithOptions({ colors: true }, '[CREATE_FILTER][INPUT] Request Query: %O', query));
     // Default values to avoid crashing the query
-    let { _start: skip = 0, _end: limit = 0, _order: order = 'asc', _sort: field = '_id' } = query, others = __rest(query, ["_start", "_end", "_order", "_sort"]);
+    let { _start: skip = 0, _end: limit = 20, // 20 items per page
+    _order: order = 'asc', _sort: field = '_id' } = query, others = __rest(query, ["_start", "_end", "_order", "_sort"]);
     // For a value in a specific field, works like the LIKE operator from SQL
     // Allows a loose search
     let queryConditions = Object();
@@ -35,13 +43,15 @@ function createFilter(query) {
             $options: 'i',
         };
     }
-    return {
+    let filter = {
         skip: Number(skip),
-        limit: Number(skip),
+        limit: Number(limit),
         order: String(order),
         field: String(field),
         queryConditions
     };
+    debug(util_1.formatWithOptions({ colors: true }, '[CREATE_FILTER][OUTPUT] Object: %O', filter));
+    return filter;
 }
 exports.createFilter = createFilter;
 exports.default = { isAuthorized, createFilter };

@@ -31,6 +31,7 @@ app.use(express.json());
 
 // Routes
 app.use(routes.tools);
+app.use(routes.users);
 app.use(routes.authentication);
 
 // Error handling as middleware (catches all errors in app)

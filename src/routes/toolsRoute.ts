@@ -1,11 +1,12 @@
 import { Router, Request, Response } from 'express';
 import toolsController from '../controllers/toolsController';
 import verifyJwtMiddleware from '../middlewares/verifyJwtMiddleware';
+import loadJwtMiddleware from '../middlewares/loadJwtMiddleware';
 
 const routes = Router();
 
-routes.get('/tools', toolsController.index);
-routes.get('/tools/:id', toolsController.show);
+routes.get('/tools', loadJwtMiddleware, toolsController.index);
+routes.get('/tools/:id', loadJwtMiddleware, toolsController.show);
 routes.post('/tools', verifyJwtMiddleware, toolsController.create);
 routes.put('/tools/:id', verifyJwtMiddleware, toolsController.update);
 routes.delete('/tools/:id', verifyJwtMiddleware, toolsController.remove);

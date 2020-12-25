@@ -191,8 +191,8 @@ describe('Tools Controller WITH credentials', () => {
         expect(res.body).to.have.property('link');
         expect(res.body).to.have.property('description');
         expect(res.body).to.have.property('tags');
-        expect(res.body).to.not.have.property('created_at');
-        expect(res.body).to.not.have.property('updated_at');
+        expect(res.body).to.have.property('created_at');
+        expect(res.body).to.have.property('updated_at');
 
         toolID = res.body.id;
         done();
@@ -232,8 +232,8 @@ describe('Tools Controller WITH credentials', () => {
         expect(res.body).to.have.property('link');
         expect(res.body).to.have.property('description');
         expect(res.body).to.have.property('tags');
-        expect(res.body).to.not.have.property('created_at');
-        expect(res.body).to.not.have.property('updated_at');
+        expect(res.body).to.have.property('created_at');
+        expect(res.body).to.have.property('updated_at');
 
         done();
       });

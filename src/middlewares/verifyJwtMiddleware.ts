@@ -1,39 +1,25 @@
 /*
-* This is a middleware that checks if the user has sent the JWT token and if it is valid. 
-* Being valid, the request continues, being invalid, 403 or 401 is returned as HTTP status.
-* 
-* Use this middleware on every route that requires authentication.
+* This middleware checks whether the user is authorized. 
+* Otherwise, it denies access.
 */
 import { Request, Response, NextFunction } from 'express';
-import path from 'path';
-import fs from 'fs';
-import jwt from 'jsonwebtoken';
+import loadJwtMiddleware from './loadJwtMiddleware';
+import { isAuthorized } from '../lib/helpers';
 
 export default (req: Request, res: Response, next: NextFunction) => {
-  const errorNotAuthorized = {
-    error: 'Authorization',
-    message: 'No authorization token sent.'
-  };
+ 
+  // Load token if any
+  loadJwtMiddleware(req, res, () => {});
 
-  // Uses Bearer authentication scheme
-  if(req.headers.authorization){
-    const token = req.headers.authorization.split(' ')[1];
-
-    if(token){
-      const publicKey = fs.readFileSync(path.join(__dirname, '..', '..', 'keys', 'public.pen'));
-      jwt.verify(token, publicKey, (err, decoded) => {
-        if(decoded){
-          // If decrypted token information is needed on the next controller
-          res.locals.jwt = decoded;
-          return next();
-        }else{
-          return res.status(401).json(errorNotAuthorized);
-        }
-      });
-    }else{
-      return res.status(401).json(errorNotAuthorized);
-    }
+  // Auth
+  if(isAuthorized(res)){
+    return next();
   }else{
     return res.status(401).json(errorNotAuthorized);
   }
+};
+
+const errorNotAuthorized = {
+  error: 'Authorization',
+  message: 'Token was not sent or is expired.'
 };

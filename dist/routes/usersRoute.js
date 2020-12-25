@@ -4,20 +4,20 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const toolsController_1 = __importDefault(require("../controllers/toolsController"));
+const usersController_1 = __importDefault(require("../controllers/usersController"));
 const verifyJwtMiddleware_1 = __importDefault(require("../middlewares/verifyJwtMiddleware"));
 const loadJwtMiddleware_1 = __importDefault(require("../middlewares/loadJwtMiddleware"));
 const routes = express_1.Router();
-routes.get('/tools', loadJwtMiddleware_1.default, toolsController_1.default.index);
-routes.get('/tools/:id', loadJwtMiddleware_1.default, toolsController_1.default.show);
-routes.post('/tools', verifyJwtMiddleware_1.default, toolsController_1.default.create);
-routes.put('/tools/:id', verifyJwtMiddleware_1.default, toolsController_1.default.update);
-routes.delete('/tools/:id', verifyJwtMiddleware_1.default, toolsController_1.default.remove);
+routes.get('/users', loadJwtMiddleware_1.default, usersController_1.default.index);
+routes.get('/users/:id', loadJwtMiddleware_1.default, usersController_1.default.show);
+routes.post('/users', verifyJwtMiddleware_1.default, usersController_1.default.create);
+routes.put('/users/:id', verifyJwtMiddleware_1.default, usersController_1.default.update);
+routes.delete('/users/:id', verifyJwtMiddleware_1.default, usersController_1.default.remove);
 // This tells the user that he cannot use these methods without the id parameter.
-routes.put('/tools', (req, res) => {
+routes.put('/users', (req, res) => {
     return res.status(405).json();
 });
-routes.delete('/tools', (req, res) => {
+routes.delete('/users', (req, res) => {
     return res.status(405).json();
 });
 exports.default = routes;

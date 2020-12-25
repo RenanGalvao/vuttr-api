@@ -7,6 +7,7 @@ export default interface Tool extends Document {
   link?: string;
   description?: string;
   tags?: string[];
+  userId?: any; // Schema.Types.ObjectId
   created_at?: string;
   updated_at?: string;
 };

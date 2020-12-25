@@ -39,11 +39,12 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const userModel_1 = __importDefault(require("../models/userModel"));
 const util_1 = require("util");
 // Setting debug name for the file
-const debug = util_1.debuglog('login');
+const debug = util_1.debuglog('auth');
 exports.default = {
+    // [POST]
     verify(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            debug(util_1.formatWithOptions({ colors: true }, '[LOGIN] Request Body: %O', req.body));
+            debug(util_1.formatWithOptions({ colors: true }, '[AUTH][POST] Request Body: %O\nResponse Locals: %O', req.body, res.locals));
             // Recover data in User format
             const data = Object.assign({}, req.body);
             // Checks whether the data sent is valid
@@ -63,7 +64,11 @@ exports.default = {
                     const auth = yield bcrypt_1.default.compare(data.password, user.password);
                     if (auth) {
                         // Configure the JWT token to be sent to the user
-                        const payload = { userId: user._id };
+                        const payload = {
+                            userId: user._id,
+                            userEmail: user.email,
+                            userName: user.name,
+                        };
                         const privateKey = fs_1.default.readFileSync(path_1.default.join(__dirname, '..', '..', 'keys', 'private.pen'));
                         const acess_options = { algorithm: 'RS256', expiresIn: '1h' };
                         const refresh_options = { algorithm: 'RS256', expiresIn: '2h' };

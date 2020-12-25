@@ -12,6 +12,8 @@ module.exports = {
         'writing',
         'calendar',
       ],
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(), 
     }, {
       title: 'Json-Server',
       link: 'https://github.com/typicode/json-server',
@@ -24,6 +26,8 @@ module.exports = {
         'github',
         'rest',
       ],
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(), 
     }, {
       title: 'Fastify',
       link: 'https://www.fastify.io/',
@@ -36,6 +40,8 @@ module.exports = {
         'https',
         'localhost',
       ],
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(), 
     }]);
   },
 
