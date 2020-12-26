@@ -9,7 +9,7 @@
   "scripts": {
     "start": "NODE_ENV=production node dist/index",
     "dev": "NODE_ENV=development ./node_modules/.bin/ts-node-dev --transpile-only --ignore-watch node_modules src/index",
-    "test": "NODE_ENV=test jest --forceExit",
+    "test": "NODE_ENV=test node ./test/config/database.setup.js && jest --forceExit",
     "build": "tsc"
   },
   "devDependencies": {
@@ -17,6 +17,7 @@
     "@types/express": "^4.17.9",
     "@types/jest": "^26.0.19",
     "@types/jsonwebtoken": "^8.5.0",
+    "@types/migrate-mongo": "^7.0.1",
     "@types/mongoose": "^5.10.0",
     "@types/supertest": "^2.0.10",
     "@types/yup": "^0.29.9",
@@ -24,6 +25,7 @@
     "@typescript-eslint/parser": "^4.8.0",
     "eslint": "^7.13.0",
     "jest": "^26.6.3",
+    "migrate-mongo": "^8.1.4",
     "supertest": "^6.0.1",
     "ts-jest": "^26.4.4",
     "ts-node-dev": "^1.0.0",

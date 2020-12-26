@@ -7,7 +7,7 @@ const routes = Router();
 
 routes.get('/users', loadJwtMiddleware, usersController.index);
 routes.get('/users/:id', loadJwtMiddleware, usersController.show);
-routes.post('/users', verifyJwtMiddleware, usersController.create);
+routes.post('/users', loadJwtMiddleware, usersController.create);
 routes.put('/users/:id', verifyJwtMiddleware, usersController.update);
 routes.delete('/users/:id', verifyJwtMiddleware, usersController.remove);
 

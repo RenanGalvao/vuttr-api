@@ -1,3 +1,5 @@
+const { id } = require('./20201224150147-users');
+
 module.exports = {
   async up(db, client) {
     await db.collection('tools').insertMany([
@@ -12,6 +14,7 @@ module.exports = {
         'writing',
         'calendar',
       ],
+      userId: id,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(), 
     }, {
@@ -26,6 +29,7 @@ module.exports = {
         'github',
         'rest',
       ],
+      userId: id,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(), 
     }, {
@@ -40,6 +44,7 @@ module.exports = {
         'https',
         'localhost',
       ],
+      userId: id,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(), 
     }]);

@@ -4,6 +4,7 @@ import * as Yup from 'yup';
 import userCollection from '../models/userModel';
 import userView from '../views/usersView'
 import User from '../interfaces/usersInterface';
+import JWT from '../interfaces/jwtInterface';
 import { createFilter } from '../lib/helpers'
 import { debuglog, formatWithOptions } from 'util';
 
@@ -72,7 +73,11 @@ export default {
       }); 
       await schema.validate(data, {abortEarly: false});
 
-      const user = await userCollection.findOneAndUpdate({ _id: req.params.id}, {$set: data});
+      const jwt = {
+        ...res.locals.jwt
+      } as JWT;
+
+      const user = await userCollection.findOneAndUpdate({ _id: jwt.userId}, {$set: data});
       return userView(user, req, res);
     }
   },
@@ -82,7 +87,11 @@ export default {
     debug(formatWithOptions({colors: true}, '[USERS][DELETE] Request Body: %O\nResponse Locals:', req.body, res.locals));
     if(mongoose.Types.ObjectId.isValid(new mongoose.Types.ObjectId(req.params.id))){
       
-      await userCollection.deleteOne({ _id: req.params.id });
+      const jwt = {
+        ...res.locals.jwt
+      } as JWT;
+
+      await userCollection.deleteOne({ _id: jwt.userId });
       return res.status(204).end();
     }
   }

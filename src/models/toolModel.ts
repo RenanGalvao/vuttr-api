@@ -8,7 +8,7 @@ const toolSchema = new Schema({
   link: {type: String, trim: true, required: true },
   description: {type: String, trim: true, required: true},
   tags: {type: Array, required: true},
-  //userId: {type: Schema.Types.ObjectId, ref: 'users', required: true},
+  userId: {type: Schema.Types.ObjectId, ref: 'users', required: true},
 },
 { 
   collection: 'tools',

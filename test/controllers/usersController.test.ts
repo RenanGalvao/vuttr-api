@@ -68,14 +68,17 @@ describe('User Controller WITHOUT credentials', () => {
 
   describe('/users [POST]', () => {
 
-    test('Request to /users/ with valid body, should res with error and 401 status', done => {
+    test('Request to /users with valid body, should res with user and 201 status', done => {
 
       request(app).post('/users').send(validPostData).end((err, res) => {
 
-        expect(res.status).toEqual(401);
+        expect(res.status).toEqual(201);
         expect(res.type).toEqual('application/json');
-        expect(res.body.error).toBeTruthy();
-        expect(res.body.message).toBeTruthy();
+        expect(res.body.id).toBeTruthy();
+        expect(res.body.name).toBeTruthy();
+        expect(res.body.email).toBeTruthy();
+        expect(res.body.created_at).toBeUndefined();
+        expect(res.body.updated_at).toBeUndefined();
 
         done();
       });
@@ -191,19 +194,6 @@ describe('User Controller WITH credentials', () => {
         expect(res.body.errors).toBeTruthy();
         expect(res.body.message).toBeTruthy();
         expect(res.body.errors.name).toBeTruthy();
-
-        done();
-      });
-    });
-
-    test('Request to /users/:no_existent_id with valid body, should res with error and 404 status', done => {
-
-      request(app).put(`/users/${nonExistentId}`).set(authHeader).send(validPutData).end((err, res) => {
-
-        expect(res.status).toEqual(404);
-        expect(res.type).toEqual('application/json');
-        expect(res.body.error).toBeTruthy();
-        expect(res.body.message).toBeTruthy();
 
         done();
       });

@@ -1,7 +1,3 @@
-- criar testes para a rota de usuários
-- associar o usuário as tools pelo id (começar pelo migration e admin), fazer no model bonitinho
-- só permitir que usuários se apaguem a si mesmos ou que apaguem seus tools, olhar o jwt.userId e userId no tools, 
-  usar JWT interface onde necessário
+- atualizar o README.MD com as novas infos, testar a instalação para vê se tudo funciona como deveria
+- atualizar o blueprint com a nova rota (usuários) e rota de login
 - testar multiplos domains
-- trocar os testes pelo jest
-- webpack para dist?

@@ -4,6 +4,7 @@ import * as Yup from 'yup';
 import toolCollection from '../models/toolModel';
 import toolView from '../views/toolsView';
 import Tool from '../interfaces/toolsInterface';
+import JWT from '../interfaces/jwtInterface';
 import { createFilter } from '../lib/helpers'
 import { debuglog, formatWithOptions } from 'util';
 
@@ -55,6 +56,12 @@ export default {
     }); 
     await schema.validate(data, { abortEarly: false });
 
+    // Append userId
+    const jwt = {
+      ...res.locals.jwt
+    } as JWT;
+    data.userId = jwt.userId;
+
     const tool = await toolCollection.create(data);
     return toolView(tool, req, res);
   },
@@ -78,7 +85,11 @@ export default {
       }); 
       await schema.validate(data, {abortEarly: false});
 
-      const tool = await toolCollection.findOneAndUpdate({ _id: req.params.id}, {$set: data});
+      const jwt = {
+        ...res.locals.jwt
+      } as JWT;
+
+      const tool = await toolCollection.findOneAndUpdate({_id: req.params.id, userId: jwt.userId}, {$set: data});
       return toolView(tool, req, res);
     }
   },
@@ -88,7 +99,11 @@ export default {
     debug(formatWithOptions({colors: true}, '[TOOLS][DELETE] Request Body: %O\nResponse Locals:', req.body, res.locals));
     if(mongoose.Types.ObjectId.isValid(new mongoose.Types.ObjectId(req.params.id))){
       
-      await toolCollection.deleteOne({ _id: req.params.id });
+      const jwt = {
+        ...res.locals.jwt
+      } as JWT;
+
+      await toolCollection.deleteOne({_id: req.params.id, userId: jwt.userId});
       return res.status(204).end();
     }
   }
