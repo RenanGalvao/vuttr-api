@@ -76,6 +76,9 @@ exports.default = {
                 tags: Yup.array().of(Yup.string()).required()
             });
             yield schema.validate(data, { abortEarly: false });
+            // Append userId
+            const jwt = Object.assign({}, res.locals.jwt);
+            data.userId = jwt.userId;
             const tool = yield toolModel_1.default.create(data);
             return toolsView_1.default(tool, req, res);
         });
@@ -93,7 +96,8 @@ exports.default = {
                     tags: Yup.array().of(Yup.string().min(1)).min(1)
                 });
                 yield schema.validate(data, { abortEarly: false });
-                const tool = yield toolModel_1.default.findOneAndUpdate({ _id: req.params.id }, { $set: data });
+                const jwt = Object.assign({}, res.locals.jwt);
+                const tool = yield toolModel_1.default.findOneAndUpdate({ _id: req.params.id, userId: jwt.userId }, { $set: data });
                 return toolsView_1.default(tool, req, res);
             }
         });
@@ -103,7 +107,8 @@ exports.default = {
         return __awaiter(this, void 0, void 0, function* () {
             debug(util_1.formatWithOptions({ colors: true }, '[TOOLS][DELETE] Request Body: %O\nResponse Locals:', req.body, res.locals));
             if (mongoose_1.default.Types.ObjectId.isValid(new mongoose_1.default.Types.ObjectId(req.params.id))) {
-                yield toolModel_1.default.deleteOne({ _id: req.params.id });
+                const jwt = Object.assign({}, res.locals.jwt);
+                yield toolModel_1.default.deleteOne({ _id: req.params.id, userId: jwt.userId });
                 return res.status(204).end();
             }
         });

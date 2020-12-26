@@ -91,7 +91,8 @@ exports.default = {
                     password: Yup.string().optional().min(1),
                 });
                 yield schema.validate(data, { abortEarly: false });
-                const user = yield userModel_1.default.findOneAndUpdate({ _id: req.params.id }, { $set: data });
+                const jwt = Object.assign({}, res.locals.jwt);
+                const user = yield userModel_1.default.findOneAndUpdate({ _id: jwt.userId }, { $set: data });
                 return usersView_1.default(user, req, res);
             }
         });
@@ -101,7 +102,8 @@ exports.default = {
         return __awaiter(this, void 0, void 0, function* () {
             debug(util_1.formatWithOptions({ colors: true }, '[USERS][DELETE] Request Body: %O\nResponse Locals:', req.body, res.locals));
             if (mongoose_1.default.Types.ObjectId.isValid(new mongoose_1.default.Types.ObjectId(req.params.id))) {
-                yield userModel_1.default.deleteOne({ _id: req.params.id });
+                const jwt = Object.assign({}, res.locals.jwt);
+                yield userModel_1.default.deleteOne({ _id: jwt.userId });
                 return res.status(204).end();
             }
         });

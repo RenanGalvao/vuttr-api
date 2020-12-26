@@ -8,6 +8,7 @@ const toolSchema = new mongoose_1.Schema({
     link: { type: String, trim: true, required: true },
     description: { type: String, trim: true, required: true },
     tags: { type: Array, required: true },
+    userId: { type: mongoose_1.Schema.Types.ObjectId, ref: 'users', required: true },
 }, {
     collection: 'tools',
     timestamps: {

@@ -10,7 +10,7 @@ const loadJwtMiddleware_1 = __importDefault(require("../middlewares/loadJwtMiddl
 const routes = express_1.Router();
 routes.get('/users', loadJwtMiddleware_1.default, usersController_1.default.index);
 routes.get('/users/:id', loadJwtMiddleware_1.default, usersController_1.default.show);
-routes.post('/users', verifyJwtMiddleware_1.default, usersController_1.default.create);
+routes.post('/users', loadJwtMiddleware_1.default, usersController_1.default.create);
 routes.put('/users/:id', verifyJwtMiddleware_1.default, usersController_1.default.update);
 routes.delete('/users/:id', verifyJwtMiddleware_1.default, usersController_1.default.remove);
 // This tells the user that he cannot use these methods without the id parameter.
