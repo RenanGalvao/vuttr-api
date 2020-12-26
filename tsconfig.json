@@ -66,6 +66,7 @@
   "exclude": [
     "test",
     "dist",
-    "migration"
+    "migration",
+    "jest.config.js"
   ],
 }

@@ -52,9 +52,5 @@ app.use(routes.users);
 app.use(routes.authentication);
 // Error handling as middleware (catches all errors in app)
 app.use(handler_1.default);
-// Starts server
-app.listen(main_1.default.serverPort, () => {
-    console.log(`Listening on ${main_1.default.serverPort} port`);
-});
 // Export app for testing
 exports.default = app;

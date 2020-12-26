@@ -37,10 +37,5 @@ app.use(routes.authentication);
 // Error handling as middleware (catches all errors in app)
 app.use(errorHandler);
 
-// Starts server
-app.listen(config.serverPort, () => {
-  console.log(`Listening on ${config.serverPort} port`);
-});
-
 // Export app for testing
 export default app;
