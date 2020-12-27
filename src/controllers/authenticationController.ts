@@ -53,14 +53,14 @@ export default {
             userName: user.name, 
           } as JWT;
 
-          const privateKey = fs.readFileSync(path.join(__dirname, '..', '..', 'keys', 'private.pen'));
-          const acess_options = { algorithm: 'RS256', expiresIn: '1h'} as jwt.SignOptions;
+          const privateKey = fs.readFileSync(path.join(__dirname, '..', '..', 'keys', 'access_private.pen'));
+          const access_options = { algorithm: 'RS256', expiresIn: '1h'} as jwt.SignOptions;
           const refresh_options = { algorithm: 'RS256', expiresIn: '2h'} as jwt.SignOptions;
 
-          const acess_token =  jwt.sign(payload, privateKey, acess_options);
+          const access_token =  jwt.sign(payload, privateKey, access_options);
           const refresh_token = jwt.sign(payload, privateKey, refresh_options);
           
-          return res.status(201).json({ auth: true, acess_token, refresh_token });
+          return res.status(201).json({ auth: true, access_token, refresh_token });
         }else{
           // Wrong password
           return res.status(401).json({ auth: false });

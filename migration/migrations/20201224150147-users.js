@@ -12,6 +12,7 @@ module.exports = {
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(), 
     });
+    await db.collection('users').createIndex({name: 'text', email: 'text'});
   },
 
   async down(db, client) {

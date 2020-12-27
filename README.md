@@ -80,24 +80,25 @@ You can now add a tool via the API. Send a `POST` request to `localhost:3000/too
 
 [GET] /tools -> Returns all tools saved
 [GET] /tools/:id -> Returns a tool
-[POST] /tools -> Saves a new tool
+[POST] /tools -> Creates a new tool
 [PUT] /tools/:id -> Updates a tool
 [DELETE] /tools/:id -> Removes a tool
 
 [GET] /users -> Returns all users
 [GET] /user/:id -> Returns an user
-[POST] /user -> Saves a new user
+[POST] /user -> Creates a new user
 [PUT] /user/:id -> Updates an user
 [DELETE] /user/:id -> Removes an user
 ```
 
-For more information on the tools route, read [vuttr-blueprint.apib](https://github.com/RenanGalvao/vuttr-api/blob/master/vuttr-blueprint.apib).
+For more information on the routes, read [vuttr-blueprint.apib](https://github.com/RenanGalvao/vuttr-api/blob/master/vuttr-blueprint.apib).
 
 
 ## Development
 ### Debug
 Several files have the option of debugging via terminal. To use it, just pass the debug environment variable with the name that has been configured. Examples: `NODE_DEBUG=config yarn dev` or `NODE_DEBUG=tools,tools-view,helpers yarn dev`.
 ``` 
+debugname -> debugfile
 config -> configs/main
 auth -> controllers/authenticationController
 tools -> controllers/toolsController

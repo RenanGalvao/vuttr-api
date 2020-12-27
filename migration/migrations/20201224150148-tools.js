@@ -48,6 +48,7 @@ module.exports = {
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(), 
     }]);
+    await db.collection('tools').createIndex({title: 'text', link: 'text', description: 'text', tags: 'text'});
   },
 
   async down(db, client) {

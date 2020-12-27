@@ -53,6 +53,7 @@ function render(tool: Tool | null, isAuthorized: boolean){
     link: tool?.link,
     description: tool?.description,
     tags: tool?.tags,
+    userId: tool?.userId,
   } as Tool;
 
   if(isAuthorized){
