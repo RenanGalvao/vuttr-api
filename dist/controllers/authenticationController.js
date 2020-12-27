@@ -32,12 +32,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const Yup = __importStar(require("yup"));
-const path_1 = __importDefault(require("path"));
-const fs_1 = __importDefault(require("fs"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const userModel_1 = __importDefault(require("../models/userModel"));
 const util_1 = require("util");
+const helpers_1 = require("../lib/helpers");
 // Setting debug name for the file
 const debug = util_1.debuglog('auth');
 exports.default = {
@@ -69,12 +67,8 @@ exports.default = {
                             userEmail: user.email,
                             userName: user.name,
                         };
-                        const privateKey = fs_1.default.readFileSync(path_1.default.join(__dirname, '..', '..', 'keys', 'private.pen'));
-                        const acess_options = { algorithm: 'RS256', expiresIn: '1h' };
-                        const refresh_options = { algorithm: 'RS256', expiresIn: '2h' };
-                        const acess_token = jsonwebtoken_1.default.sign(payload, privateKey, acess_options);
-                        const refresh_token = jsonwebtoken_1.default.sign(payload, privateKey, refresh_options);
-                        return res.status(201).json({ auth: true, acess_token, refresh_token });
+                        helpers_1.generateAuthCookies(res, payload);
+                        return res.status(201).json({ auth: true });
                     }
                     else {
                         // Wrong password

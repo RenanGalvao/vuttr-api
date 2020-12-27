@@ -1,7 +1,10 @@
 // The middlewares uses it to verify authorization.
 // It differs from the middleware version, it only says whether the user is authorized or not, it does not send an error message
-import { Request, Response } from 'express';
+import { Request, Response, CookieOptions } from 'express';
 import { debuglog, formatWithOptions } from 'util';
+import jwt from 'jsonwebtoken';
+import { accessPrivateKey, accessOptions, refreshPrivateKey, refreshOptions } from '../configs/token';
+import { accessCookieOptions, refreshCookieOptions } from '../configs/cookie';
 
 // Setting debug name for the file
 const debug = debuglog('helpers');
@@ -52,6 +55,17 @@ export function createFilter(query: Request['query']){
 
   debug(formatWithOptions({colors: true}, '[CREATE_FILTER][OUTPUT] Object: %O', filter));
   return filter;
+}
+
+// Generates acess and refresh token, and set cookies
+export function generateAuthCookies(res: Response, payload: Object) {
+  // Set Tokens
+  const accessToken =  jwt.sign(payload, accessPrivateKey, accessOptions as jwt.SignOptions);
+  const refreshToken = jwt.sign(payload, refreshPrivateKey, refreshOptions as jwt.SignOptions);
+  
+  // Set Cookies
+  res.cookie('acess_token', accessToken, accessCookieOptions as CookieOptions);
+  res.cookie('refresh_token', refreshToken, refreshCookieOptions as CookieOptions);
 }
 
 export default { isAuthorized, createFilter };

@@ -1,41 +1,62 @@
 /*
-/*
-* This middleware loads JsonWebToken if it was sent.
-* Use this middleware on every route that requires authentication.
+* This middleware loads and refresh JWT token to res.locals.jwt if was sent over cookie.
 */
 import { Request, Response, NextFunction } from 'express';
-import path from 'path';
-import fs from 'fs';
 import jwt from 'jsonwebtoken';
 import { debuglog, formatWithOptions } from 'util';
+import { accessPublicKey, refreshPublicKey } from '../configs/token';
+import { generateAuthCookies } from '../lib/helpers';
+import JWT from '../interfaces/jwtInterface';
 
 // Setting debug name for the file
 const debug = debuglog('load-jwt');
 
 export default (req: Request, res: Response, next: NextFunction) => {
-  debug(formatWithOptions({colors: true}, '[LOAD_JWT][INPUT] Request Body: %O\nResponse Locals: %O', req.body, res.locals));
+  debug(formatWithOptions({colors: true}, '[LOAD_JWT][INPUT] Request Body: %O\nRequest Cookies: %O', req.body, req.cookies));
+  // Load cookies
+  const accessToken = req.cookies?.acess_token ? req.cookies.acess_token : false;
+  const refreshToken = req.cookies?.refresh_token ? req.cookies.refresh_token : false;
 
-  // Uses Bearer authentication scheme
-  if(req.headers.authorization){
-    const token = req.headers.authorization.split(' ')[1];
+  // Access Token
+  if(accessToken){
+    // Verify access token
+    try{
 
-    if(token){
-      const publicKey = fs.readFileSync(path.join(__dirname, '..', '..', 'keys', 'public.pen'));
-      jwt.verify(token, publicKey, (err, decoded) => {
-        if(decoded){
-          // If decoded token information is needed on the next controller
-          res.locals.jwt = decoded;
+      const decoded = jwt.verify(accessToken, accessPublicKey);
+      res.locals.jwt = decoded;
+      debug(formatWithOptions({colors: true}, '[LOAD_JWT][OUTPUT] Response Locals: %O', res.locals));
+      return next();
+    
+    }catch(err){
+      debug(formatWithOptions({colors: true}, '[LOAD_JWT][OUTPUT] Error: %O', err));
+    }
+  }
 
-          debug(formatWithOptions({colors: true}, '[LOAD_JWT][OUTPUT] Response Locals: %O', res.locals));
-          return next();
-        }else{
-          return next();
-        }
-      });
-    }else{
+  // Refresh Token
+  else if(refreshToken){
+    // Verify refresh token - Only gets here if acess_token is expired
+    try{
+      
+      const decoded = jwt.verify(refreshToken, refreshPublicKey) as JWT;
+      res.locals.jwt = decoded;
+      // Being valid, generate new tokens
+      const payload = {
+        userId: decoded.userId,
+        userEmail: decoded.userEmail,
+        userName: decoded.userName, 
+      } as JWT;
+      generateAuthCookies(res, payload);
+      debug(formatWithOptions({colors: true}, '[LOAD_JWT][OUTPUT] Response Locals: %O', res.locals));
+      return next();
+
+    }catch(err){
+      debug(formatWithOptions({colors: true}, '[LOAD_JWT][OUTPUT] Error: %O', err));
       return next();
     }
-  }else{
+  }
+
+  // None
+  else{
     return next();
   }
 };

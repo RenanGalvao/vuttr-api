@@ -43,6 +43,7 @@ function render(tool, isAuthorized) {
         link: tool === null || tool === void 0 ? void 0 : tool.link,
         description: tool === null || tool === void 0 ? void 0 : tool.description,
         tags: tool === null || tool === void 0 ? void 0 : tool.tags,
+        userId: tool === null || tool === void 0 ? void 0 : tool.userId,
     };
     if (isAuthorized) {
         viewObj = Object.assign(Object.assign({}, viewObj), { created_at: tool === null || tool === void 0 ? void 0 : tool.created_at, updated_at: tool === null || tool === void 0 ? void 0 : tool.updated_at });

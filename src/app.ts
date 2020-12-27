@@ -1,4 +1,6 @@
 import express, { Request, Response, NextFunction } from 'express';
+import cookieParser from 'cookie-parser';
+import loadJwt from './middlewares/loadJwtMiddleware';
 import 'express-async-errors';
 import helmet from 'helmet';
 
@@ -28,6 +30,12 @@ app.use(function(req: Request, res: Response, next: NextFunction): any{
 
 // Parse incoming data to JSON
 app.use(express.json());
+
+// Parse cookies
+app.use(cookieParser());
+
+// Load JWT from cookies to res.locals.jwt
+app.use(loadJwt);
 
 // Routes
 app.use(routes.tools);

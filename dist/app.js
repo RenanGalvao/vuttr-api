@@ -23,6 +23,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+const cookie_parser_1 = __importDefault(require("cookie-parser"));
+const loadJwtMiddleware_1 = __importDefault(require("./middlewares/loadJwtMiddleware"));
 require("express-async-errors");
 const helmet_1 = __importDefault(require("helmet"));
 require("./database/connection");
@@ -46,6 +48,10 @@ app.use(function (req, res, next) {
 });
 // Parse incoming data to JSON
 app.use(express_1.default.json());
+// Parse cookies
+app.use(cookie_parser_1.default());
+// Load JWT from cookies to res.locals.jwt
+app.use(loadJwtMiddleware_1.default);
 // Routes
 app.use(routes.tools);
 app.use(routes.users);

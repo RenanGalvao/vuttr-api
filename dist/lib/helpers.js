@@ -10,9 +10,15 @@ var __rest = (this && this.__rest) || function (s, e) {
         }
     return t;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createFilter = exports.isAuthorized = void 0;
+exports.generateAuthCookies = exports.createFilter = exports.isAuthorized = void 0;
 const util_1 = require("util");
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const token_1 = require("../configs/token");
+const cookie_1 = require("../configs/cookie");
 // Setting debug name for the file
 const debug = util_1.debuglog('helpers');
 function isAuthorized(res) {
@@ -54,4 +60,14 @@ function createFilter(query) {
     return filter;
 }
 exports.createFilter = createFilter;
+// Generates acess and refresh token, and set cookies
+function generateAuthCookies(res, payload) {
+    // Set Tokens
+    const accessToken = jsonwebtoken_1.default.sign(payload, token_1.accessPrivateKey, token_1.accessOptions);
+    const refreshToken = jsonwebtoken_1.default.sign(payload, token_1.refreshPrivateKey, token_1.refreshOptions);
+    // Set Cookies
+    res.cookie('acess_token', accessToken, cookie_1.accessCookieOptions);
+    res.cookie('refresh_token', refreshToken, cookie_1.refreshCookieOptions);
+}
+exports.generateAuthCookies = generateAuthCookies;
 exports.default = { isAuthorized, createFilter };

@@ -1,13 +1,12 @@
 import { Request, Response } from 'express';
 import * as Yup from 'yup';
-import path from 'path';
-import fs from 'fs';
 import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
 import userCollection from '../models/userModel';
 import User from '../interfaces/usersInterface';
 import { debuglog, formatWithOptions } from 'util';
 import JWT from '../interfaces/jwtInterface';
+import { generateAuthCookies, isAuthorized } from '../lib/helpers';
+
 
 // Setting debug name for the file
 const debug = debuglog('auth');
@@ -18,6 +17,11 @@ export default {
   // [POST]
   async verify(req: Request, res: Response){
     debug(formatWithOptions({colors: true}, '[AUTH][POST] Request Body: %O\nResponse Locals: %O', req.body, res.locals));
+
+    // If already logged in redirect to /painel
+    if(isAuthorized(res)){
+      return res.redirect('/painel');
+    }
 
     // Recover data in User format
     const data = {
@@ -53,14 +57,9 @@ export default {
             userName: user.name, 
           } as JWT;
 
-          const privateKey = fs.readFileSync(path.join(__dirname, '..', '..', 'keys', 'access_private.pen'));
-          const access_options = { algorithm: 'RS256', expiresIn: '1h'} as jwt.SignOptions;
-          const refresh_options = { algorithm: 'RS256', expiresIn: '2h'} as jwt.SignOptions;
-
-          const access_token =  jwt.sign(payload, privateKey, access_options);
-          const refresh_token = jwt.sign(payload, privateKey, refresh_options);
+          generateAuthCookies(res, payload);
+          return res.status(201).json({ auth: true });
           
-          return res.status(201).json({ auth: true, access_token, refresh_token });
         }else{
           // Wrong password
           return res.status(401).json({ auth: false });
