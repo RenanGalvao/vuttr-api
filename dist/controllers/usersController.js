@@ -37,6 +37,7 @@ const userModel_1 = __importDefault(require("../models/userModel"));
 const usersView_1 = __importDefault(require("../views/usersView"));
 const helpers_1 = require("../lib/helpers");
 const util_1 = require("util");
+const bcrypt_1 = __importDefault(require("bcrypt"));
 // Setting debug name for the file
 const debug = util_1.debuglog('users');
 exports.default = {
@@ -75,6 +76,8 @@ exports.default = {
                 password: Yup.string().required(),
             });
             yield schema.validate(data, { abortEarly: false });
+            // Encrypt user's password before saving
+            data.password = yield bcrypt_1.default.hash(data.password, 10);
             const user = yield userModel_1.default.create(data);
             return usersView_1.default(user, req, res);
         });

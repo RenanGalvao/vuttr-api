@@ -43,6 +43,10 @@ exports.default = {
     verify(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             debug(util_1.formatWithOptions({ colors: true }, '[AUTH][POST] Request Body: %O\nResponse Locals: %O', req.body, res.locals));
+            // If already logged in redirect to /painel
+            if (helpers_1.isAuthorized(res)) {
+                return res.redirect('/painel');
+            }
             // Recover data in User format
             const data = Object.assign({}, req.body);
             // Checks whether the data sent is valid
@@ -52,6 +56,7 @@ exports.default = {
             });
             yield schema.validate(data, { abortEarly: false });
             const user = yield userModel_1.default.findOne({ email: data.email });
+            debug(util_1.formatWithOptions({ colors: true }, '[AUTH][POST] User Document: %O', user));
             if (!user) {
                 return res.status(404).json({ auth: false });
             }
