@@ -7,6 +7,7 @@ import User from '../interfaces/usersInterface';
 import JWT from '../interfaces/jwtInterface';
 import { createFilter } from '../lib/helpers'
 import { debuglog, formatWithOptions } from 'util';
+import bcrypt from 'bcrypt';
 
 // Setting debug name for the file
 const debug = debuglog('users');
@@ -52,6 +53,9 @@ export default {
       password: Yup.string().required(),
     }); 
     await schema.validate(data, { abortEarly: false });
+
+    // Encrypt user's password before saving
+    data.password = await bcrypt.hash(data.password, 10);
 
     const user = await userCollection.create(data);
     return userView(user, req, res);

@@ -2,7 +2,7 @@ FORMAT: 1A
 
 # Vuttr
 
-VVery Useful Tools to Remember is an API to save your favorites tools made in NodeJS.
+Very Useful Tools to Remember is an API to save your favorites tools made in NodeJS.
 
 # Group Tools
 
@@ -16,7 +16,7 @@ Resources related to tools in the API.
 
         [
           {
-            "_id": "5fb6777a30e8fd3ef287e17b",
+            "id": "5fb6777a30e8fd3ef287e17b",
             "title": "Notion",
             "link": "https://notion.so",
             "description": "All in one tool to organize teams and ideas. Write, plan, collaborate, and get organized.",
@@ -26,7 +26,8 @@ Resources related to tools in the API.
               "collaboration",
               "writing",
               "calendar"
-            ]
+            ],
+            "userId": "5fe7554e4563ce58df30104b"
           }
         ]
 
@@ -53,7 +54,7 @@ You can add your tool using this action. The following parameters are required.
           ]
         }
 
-+ Response 201 (application/json)
++ Response 201
 
   + Headers
 
@@ -71,25 +72,28 @@ You can add your tool using this action. The following parameters are required.
             Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept
             Access-Control-Allow-Credentials: true
             Content-Type: application/json; charset=utf-8
-            Content-Length: 256
-            ETag: W/"100-3khYJRZUToQwG1d5NgwRwrwyI/E"
-            Date: Sun, 22 Nov 2020 11:51:58 GMT
+            Content-Length: 371
+            ETag: W/"173-MUGOzSBG3apYtLwbskhfkHS9l5o"
+            Date: Mon, 28 Dec 2020 12:32:13 GMT
             Connection: keep-alive
             Keep-Alive: timeout=5
 
   + Body
 
             {
-              "_id": "5fba50de33e7f812d0734a01",
-              "title": "My favorite tool",
-              "link": "https://github.com/facebook/react",
-              "description": "A declarative, efficient, and flexible JavaScript library for building user interfaces.",
-              "tags": [
-                "node",
-                "javascript",
-                "frontend",
-                "react"
-              ]
+                "id": "5fe9d04df855fc2ec67e7ac7",
+                "title": "My favorite tool",
+                "link": "https://github.com/facebook/react",
+                "description": "A declarative, efficient, and flexible JavaScript library for building user interfaces.",
+                "tags": [
+                    "node",
+                    "javascript",
+                    "frontend",
+                    "react"
+                ],
+                "userId": "5fe7554e4563ce58df30104b",
+                "created_at": "2020-12-28T12:32:13.594Z",
+                "updated_at": "2020-12-28T12:32:13.594Z"
             }
 
 ## Tool [/tools/{tool_id}]
@@ -102,20 +106,20 @@ You can add your tool using this action. The following parameters are required.
 + Response 200 (application/json)
 
         {
-          "_id": "5fb6777a30e8fd3ef287e17b",
-          "title": "Notion",
-          "link": "https://notion.so",
-          "description": "All in one tool to organize teams and ideas. Write, plan, collaborate, and get organized.",
-          "tags": [
-            "organization",
-            "planning",
-            "collaboration",
-            "writing",
-            "calendar"
-          ]
+            "id": "5fe9d04df855fc2ec67e7ac7",
+            "title": "My favorite tool",
+            "link": "https://github.com/facebook/react",
+            "description": "A declarative, efficient, and flexible JavaScript library for building user interfaces.",
+            "tags": [
+                "node",
+                "javascript",
+                "frontend",
+                "react"
+            ],
+            "userId": "5fe7554e4563ce58df30104b"
         }
 
-## Update a Tool [PUT]
+### Update a Tool [PUT]
 
 You can update any tool using this action. The following parameters are optional.
 
@@ -130,7 +134,7 @@ You can update any tool using this action. The following parameters are optional
           "title": "ReactJS"
         }
 
-+ Response 200 (application/json)
++ Response 200
 
   + Headers
 
@@ -148,27 +152,200 @@ You can update any tool using this action. The following parameters are optional
             Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept
             Access-Control-Allow-Credentials: true
             Content-Type: application/json; charset=utf-8
-            Content-Length: 247
-            ETag: W/"f7-CuiBiMWfNW1XHFDDagJcAmJiyj8"
-            Date: Sun, 22 Nov 2020 12:07:06 GMT
+            Content-Length: 362
+            ETag: W/"16a-Q9tQ2MMgk4tAHFPCduJudVtozFk"
+            Date: Mon, 28 Dec 2020 12:38:30 GMT
             Connection: keep-alive
             Keep-Alive: timeout=5
 
   + Body
 
             {
-              "_id": "5fba50de33e7f812d0734a01",
-              "title": "ReactJS",
-              "link": "https://github.com/facebook/react",
-              "description": "A declarative, efficient, and flexible JavaScript library for building user interfaces.",
-              "tags": [
-                "node",
-                "javascript",
-                "frontend",
-                "react"
-              ]
+                "id": "5fe9d04df855fc2ec67e7ac7",
+                "title": "ReactJS",
+                "link": "https://github.com/facebook/react",
+                "description": "A declarative, efficient, and flexible JavaScript library for building user interfaces.",
+                "tags": [
+                    "node",
+                    "javascript",
+                    "frontend",
+                    "react"
+                ],
+                "userId": "5fe7554e4563ce58df30104b",
+                "created_at": "2020-12-28T12:32:13.594Z",
+                "updated_at": "2020-12-28T12:38:30.709Z"
             }
 
 ### Delete a Tool [DELETE]
 
 + Response 204
+
+    + Headers
+    
+            Content-Security-Policy: default-src 'self';base-uri 'self';block-all-mixed-content;font-src 'self' https: data:;frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests
+            X-DNS-Prefetch-Control: off
+            Expect-CT: max-age=0
+            X-Frame-Options: SAMEORIGIN
+            Strict-Transport-Security: max-age=15552000; includeSubDomains
+            X-Download-Options: noopen
+            X-Content-Type-Options: nosniff
+            X-Permitted-Cross-Domain-Policies: none
+            Referrer-Policy: no-referrer
+            X-XSS-Protection: 0
+            Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS
+            Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept
+            Access-Control-Allow-Credentials: true
+            Date: Mon, 28 Dec 2020 12:41:41 GMT
+            Connection: keep-alive
+            Keep-Alive: timeout=5
+            
+# Group Users
+
+Resources related to users in the API.
+
+## User Collection [/users]
+
+### List All Users [GET]
+
++ Response 200 (application/json)
+
+        [
+            {
+                "id": "5fe7554e4563ce58df30104b",
+                "name": "Admin",
+                "email": "admin@dev.com"
+            }
+        ]
+
+### Create a New User [POST]
+
+You can add a new user using this action. The following parameters are required.
+
++ name (string) - User's name.
++ email (string) - User's email.
++ password (string) - User's password.
+
++ Request (application/json) 
+
+        {
+          "name": "Albert Camus",
+          "email": "albert.camus@gmail.com",
+          "password": "cequ'ilcroitvraidoitréglersonaction"
+        }
+        
++ Response 201
+    
+    + Headers
+            
+                Content-Security-Policy: default-src 'self';base-uri 'self';block-all-mixed-content;font-src 'self' https: data:;frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests
+                X-DNS-Prefetch-Control: off
+                Expect-CT: max-age=0
+                X-Frame-Options: SAMEORIGIN
+                Strict-Transport-Security: max-age=15552000; includeSubDomains
+                X-Download-Options: noopen
+                X-Content-Type-Options: nosniff
+                X-Permitted-Cross-Domain-Policies: none
+                Referrer-Policy: no-referrer
+                X-XSS-Protection: 0
+                Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS
+                Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept
+                Access-Control-Allow-Credentials: true
+                Content-Type: application/json; charset=utf-8
+                Content-Length: 88
+                ETag: W/"58-skRK+zp1yn9TzcfaUNKCVkv6L9Q"
+                Date: Mon, 28 Dec 2020 12:59:01 GMT
+                Connection: keep-alive
+                Keep-Alive: timeout=5
+                
+    + Body 
+    
+            {
+                "id": "5fe9d695f855fc2ec67e7aca",
+                "name": "Albert Camus",
+                "email": "albert.camus@gmail.com"
+            }
+            
+## User [/users/{user_id}]
+
++ Parameters
+  + user_id (string) - ID of the user, being a single string of 12 bytes or a string of 24 hex characters.
+
+### View an User in Detail [GET]
+
++ Response 200 (application/json)
+
+        {
+            "id": "5fe9d695f855fc2ec67e7aca",
+            "name": "Albert Camus",
+            "email": "albert.camus@gmail.com"
+        }
+
+### Update an User [PUT]
+
+You can an user info using this action. The following parameters are optional.
+
++ name (string) - User's name.
++ email (string) - User's email.
++ password (string) - User's password.
+
++ Request (application/json) 
+
+        {
+          "name": "Meme"
+        }
+
++ Response 200
+
+    + Headers
+            
+            Content-Security-Policy: default-src 'self';base-uri 'self';block-all-mixed-content;font-src 'self' https: data:;frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests
+            X-DNS-Prefetch-Control: off
+            Expect-CT: max-age=0
+            X-Frame-Options: SAMEORIGIN
+            Strict-Transport-Security: max-age=15552000; includeSubDomains
+            X-Download-Options: noopen
+            X-Content-Type-Options: nosniff
+            X-Permitted-Cross-Domain-Policies: none
+            Referrer-Policy: no-referrer
+            X-XSS-Protection: 0
+            Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS
+            Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept
+            Access-Control-Allow-Credentials: true
+            Content-Type: application/json; charset=utf-8
+            Content-Length: 160
+            ETag: W/"a0-gZm288la217oT8jSATstY2jEIPY"
+            Date: Mon, 28 Dec 2020 13:21:10 GMT
+            Connection: keep-alive
+            Keep-Alive: timeout=5
+            
+    + Body
+            {
+                "id": "5fe9db8c631a64364e9f15bc",
+                "name": "Meme",
+                "email": "albert.camus@gmail.com",
+                "created_at": "2020-12-28T13:20:12.638Z",
+                "updated_at": "2020-12-28T13:21:10.845Z"
+            }
+
+### Delete a Tool [DELETE]
+
++ Response 204
+
+    + Headers
+    
+            Content-Security-Policy: default-src 'self';base-uri 'self';block-all-mixed-content;font-src 'self' https: data:;frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests
+            X-DNS-Prefetch-Control: off
+            Expect-CT: max-age=0
+            X-Frame-Options: SAMEORIGIN
+            Strict-Transport-Security: max-age=15552000; includeSubDomains
+            X-Download-Options: noopen
+            X-Content-Type-Options: nosniff
+            X-Permitted-Cross-Domain-Policies: none
+            Referrer-Policy: no-referrer
+            X-XSS-Protection: 0
+            Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS
+            Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept
+            Access-Control-Allow-Credentials: true
+            Date: Mon, 28 Dec 2020 13:26:44 GMT
+            Connection: keep-alive
+            Keep-Alive: timeout=5

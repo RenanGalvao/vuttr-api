@@ -36,6 +36,7 @@ export default {
     await schema.validate(data, {abortEarly: false});
 
     const user = await userCollection.findOne({ email: data.email });
+    debug(formatWithOptions({colors: true}, '[AUTH][POST] User Document: %O', user));
 
     if(!user) {
 

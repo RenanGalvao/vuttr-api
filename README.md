@@ -1,22 +1,24 @@
 # VuttrAPI
-Very Useful Tools to Remember is an API to save your favorites tools made in NodeJS.
+Very Useful Tools to Remember is an API to save your favorites tools made with Node.js.
 
 ## Pre-requisites
 ```
 OpenSSL >= 1.1.1
 MongoDB >= 3.6.8
-Nodejs  >= 10.23
+Node.js  >= 10.23
 Migrate-Mongo >= 8.1.4
 ```
 
 ## How To Install
 Using your terminal:
+
 ```sh
 git clone git@github.com:RenanGalvao/vuttr-api.git
 ```
-Or download the zipped version [here](https://github.com/RenanGalvao). 
+Or download the zipped version [master](https://github.com/RenanGalvao/vuttr-api/archive/master.zip). 
 
 Enter the root directory, then use the package manager of your preference, [yarn](https://yarnpkg.com/) or [npm](https://www.npmjs.com/get-npm), to install vuttr-api:
+
 ```sh
 npm install
 yarn
@@ -27,9 +29,9 @@ Make sure to have [migrate-mongo](https://www.npmjs.com/package/migrate-mongo) i
 npm install -g migrate-mongo
 ``` 
 ## Preparing For First Use
-Go to keys directory and run:
+Go to keys' directory and run:
 ```sh
-openssl req -newkey rsa:2048 -new -nodes -x509 -days 3650 -keyout private.pen -out public.pen
+openssl req -newkey rsa:2048 -new -nodes -x509 -days 3650 -keyout access_private.pen -out access_public.pen && openssl req -newkey rsa:2048 -new -nodes -x509 -days 3650 -keyout refresh_private.pen -out refresh_public.pen
 ```
 Then, inside `migration` directory run:
 ```sh
@@ -37,7 +39,7 @@ migrate-mongo up
 ```
 
 ### Optional
-If you want to run the app in production enviroment, create a copy of `.env.sample` and rename it to `.env`. Modify the file with your Mongo connection data. It is located in the root dir. Don't forget to upload the database with migrate-mongo `NODE_ENV=production migrate-mongo up`.
+If you want to run the app in production enviroment, create a copy of `.env.sample` and rename it to `.env`. Modify the file with your Mongo connection data. It is located in the root dir. You may upload the database with migrate-mongo `NODE_ENV=production migrate-mongo up`.
 
 ## Adding or Removing Tools
 First, run the app:
@@ -46,7 +48,7 @@ npm run dev
 yarn dev
 ```
 
-After that, log in and retrieve the JWT token. Send a `POST` request to `localhost:3000/login` with these fields:
+After that, log in to retrieve the access token. Send a `POST` request to `localhost:3000/login`:
 ```json
 {
   "email": "admin@dev.com",
@@ -54,15 +56,8 @@ After that, log in and retrieve the JWT token. Send a `POST` request to `localho
 }
 ```
 
-Your response (If your credentials are correct) will be something like this:
-```json
-{
-  "auth": true,
-  "acess_token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.e...",
-  "refresh_token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.e..."
-}
-```
-Use the `acess_token` in all subsequents requests as Bearer token, it expires in 1 hour. 
+Your response will be a confirmation with cookies. The access token expires in 15 minutes, the update token will regenerate both tokens after the access token expires up to 30 minutes after login.
+
 
 You can now add a tool via the API. Send a `POST` request to `localhost:3000/tools`:
 ```json

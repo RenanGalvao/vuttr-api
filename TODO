@@ -1,4 +1,3 @@
-- Usar o cookie parser como middleware universal, o load tbm para não se esquecer e retirá-lo do verifyJwt
-- atualizar o README.MD com as novas infos, testar a instalação para vê se tudo funciona como deveria
-- atualizar o blueprint com a nova rota (usuários) e rota de login
+- atualizar o blueprint
+  - terminar com o login
 - testar multiplos domains

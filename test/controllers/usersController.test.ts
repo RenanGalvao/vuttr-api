@@ -122,20 +122,17 @@ describe('User Controller WITHOUT credentials', () => {
 describe('User Controller WITH credentials', () => {
 
   let userId:string;
-  let authHeader = {
-    Authorization: 'Bearer',
-  };
+  let agent: request.SuperAgentTest;
   beforeAll(async () => {
-
-    const res = await request(app).post('/login').send(userCredentials);
-    authHeader.Authorization = `Bearer ${res.body.acess_token}`;
+    agent = request.agent(app);
+    await agent.post('/login').send(userCredentials);
   });
 
   describe('/users [POST]', () => {
 
     test('Request to /users with valid body, should res with user and 201 status', done => {
 
-      request(app).post('/users').set(authHeader).send(validPostData).end((err, res) => {
+      agent.post('/users').send(validPostData).end((err, res) => {
 
         expect(res.status).toEqual(201);
         expect(res.type).toEqual('application/json');
@@ -152,7 +149,7 @@ describe('User Controller WITH credentials', () => {
 
     test('Request to /users with invalid body, should res with errors and 400 status', done => {
 
-      request(app).post('/users').set(authHeader).send(invalidPostData).end((err, res) => {
+      agent.post('/users').send(invalidPostData).end((err, res) => {
 
         expect(res.status).toEqual(400);
         expect(res.type).toEqual('application/json');
@@ -171,7 +168,7 @@ describe('User Controller WITH credentials', () => {
 
     test('Request to /users/:id with valid body, should res with user and 200 status', done => {
 
-      request(app).put(`/users/${userId}`).set(authHeader).send(validPutData).end((err, res) => {
+      agent.put(`/users/${userId}`).send(validPutData).end((err, res) => {
 
         expect(res.status).toEqual(200);
         expect(res.type).toEqual('application/json');
@@ -187,7 +184,7 @@ describe('User Controller WITH credentials', () => {
 
     test('Request to /users/:id with invalid body, should res with errors and 400 status', done => {
 
-      request(app).put(`/users/${userId}`).set(authHeader).send(invalidPutData).end((err, res) => {
+      agent.put(`/users/${userId}`).send(invalidPutData).end((err, res) => {
 
         expect(res.status).toEqual(400);
         expect(res.type).toEqual('application/json');
@@ -201,7 +198,7 @@ describe('User Controller WITH credentials', () => {
 
     test('Request to /users/:invalid_id with valid body, should res with error and 400 status', done => {
 
-      request(app).put(`/users/${invalidId}`).set(authHeader).send(validPutData).end((err, res) => {
+      agent.put(`/users/${invalidId}`).send(validPutData).end((err, res) => {
 
         expect(res.status).toEqual(400);
         expect(res.type).toEqual('application/json');
@@ -217,7 +214,7 @@ describe('User Controller WITH credentials', () => {
 
     test('Request to /users/:id, should res with empty body and 204 status', done => {
 
-      request(app).delete(`/users/${userId}`).set(authHeader).end((err, res) => {
+      agent.delete(`/users/${userId}`).end((err, res) => {
 
         expect(res.status).toEqual(204);
         expect(res.body).toMatchObject({});
@@ -228,7 +225,7 @@ describe('User Controller WITH credentials', () => {
 
     test('Request to /users/:non_existent_id, should res with error and 204 status', done => {
 
-      request(app).delete(`/users/${nonExistentId}`).set(authHeader).end((err, res) => {
+      agent.delete(`/users/${nonExistentId}`).end((err, res) => {
 
         expect(res.status).toEqual(204);
         expect(res.body).toMatchObject({});
@@ -239,7 +236,7 @@ describe('User Controller WITH credentials', () => {
 
     test('Request to /users/:invalid_id, should res with error and 400 status', done => {
 
-      request(app).delete(`/users/${invalidId}`).set(authHeader).end((err, res) => {
+      agent.delete(`/users/${invalidId}`).end((err, res) => {
 
         expect(res.status).toEqual(400);
         expect(res.type).toEqual('application/json');

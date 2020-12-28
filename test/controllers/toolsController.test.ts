@@ -120,20 +120,17 @@ describe('Tools Controller WITHOUT credentials', () => {
 describe('Tools Controller WITH credentials', () => {
 
   let toolID:string;
-  let authHeader = {
-    Authorization: 'Bearer',
-  };
+  let agent: request.SuperAgentTest;
   beforeAll(async () => {
-
-    const res = await request(app).post('/login').send(userCredentials);
-    authHeader.Authorization = `Bearer ${res.body.acess_token}`;
+    agent = request.agent(app);
+    await agent.post('/login').send(userCredentials);
   });
 
   describe('/tools [POST]', () => {
 
     test('Request to /tools with valid body, should res with tool and 201 status', done => {
 
-      request(app).post('/tools').set(authHeader).send(validPostData).end((err, res) => {
+      agent.post('/tools').send(validPostData).end((err, res) => {
 
         expect(res.status).toEqual(201);
         expect(res.type).toEqual('application/json');
@@ -152,7 +149,7 @@ describe('Tools Controller WITH credentials', () => {
 
     test('Request to /tools with invalid body, should res with errors and 400 status', done => {
 
-      request(app).post('/tools').set(authHeader).send(invalidPostData).end((err, res) => {
+      agent.post('/tools').send(invalidPostData).end((err, res) => {
 
         expect(res.status).toEqual(400);
         expect(res.type).toEqual('application/json');
@@ -172,7 +169,7 @@ describe('Tools Controller WITH credentials', () => {
 
     test('Request to /tools/:id with valid body, should res with tool and 200 status', done => {
 
-      request(app).put(`/tools/${toolID}`).set(authHeader).send(validPutData).end((err, res) => {
+      agent.put(`/tools/${toolID}`).send(validPutData).end((err, res) => {
 
         expect(res.status).toEqual(200);
         expect(res.type).toEqual('application/json');
@@ -190,7 +187,7 @@ describe('Tools Controller WITH credentials', () => {
 
     test('Request to /tools/:id with invalid body, should res with errors and 400 status', done => {
 
-      request(app).put(`/tools/${toolID}`).set(authHeader).send(invalidPutData).end((err, res) => {
+      agent.put(`/tools/${toolID}`).send(invalidPutData).end((err, res) => {
 
         expect(res.status).toEqual(400);
         expect(res.type).toEqual('application/json');
@@ -204,7 +201,7 @@ describe('Tools Controller WITH credentials', () => {
 
     test('Request to /tools/:no_existent_id with valid body, should res with error and 404 status', done => {
 
-      request(app).put(`/tools/${nonExistentId}`).set(authHeader).send(validPutData).end((err, res) => {
+      agent.put(`/tools/${nonExistentId}`).send(validPutData).end((err, res) => {
 
         expect(res.status).toEqual(404);
         expect(res.type).toEqual('application/json');
@@ -217,7 +214,7 @@ describe('Tools Controller WITH credentials', () => {
 
     test('Request to /tools/:invalid_id with valid body, should res with error and 400 status', done => {
 
-      request(app).put(`/tools/${invalidId}`).set(authHeader).send(validPutData).end((err, res) => {
+      agent.put(`/tools/${invalidId}`).send(validPutData).end((err, res) => {
 
         expect(res.status).toEqual(400);
         expect(res.type).toEqual('application/json');
@@ -233,7 +230,7 @@ describe('Tools Controller WITH credentials', () => {
 
     test('Request to /tools/:id, should res with empty body and 204 status', done => {
 
-      request(app).delete(`/tools/${toolID}`).set(authHeader).end((err, res) => {
+      agent.delete(`/tools/${toolID}`).end((err, res) => {
 
         expect(res.status).toEqual(204);
         expect(res.body).toMatchObject({});
@@ -244,7 +241,7 @@ describe('Tools Controller WITH credentials', () => {
 
     test('Request to /tools/:non_existent_id, should res with error and 204 status', done => {
 
-      request(app).delete(`/tools/${nonExistentId}`).set(authHeader).end((err, res) => {
+      agent.delete(`/tools/${nonExistentId}`).end((err, res) => {
 
         expect(res.status).toEqual(204);
         expect(res.body).toMatchObject({});
@@ -255,7 +252,7 @@ describe('Tools Controller WITH credentials', () => {
 
     test('Request to /tools/:invalid_id, should res with error and 400 status', done => {
 
-      request(app).delete(`/tools/${invalidId}`).set(authHeader).end((err, res) => {
+      agent.delete(`/tools/${invalidId}`).end((err, res) => {
 
         expect(res.status).toEqual(400);
         expect(res.type).toEqual('application/json');

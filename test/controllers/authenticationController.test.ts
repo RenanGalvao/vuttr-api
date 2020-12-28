@@ -14,8 +14,6 @@ describe('Authentication Controller', () => {
         expect(res.status).toEqual(201);
         expect(res.type).toEqual('application/json');
         expect(res.body.auth).toBeTruthy()
-        expect(res.body.acess_token).toBeTruthy()
-        expect(res.body.refresh_token).toBeTruthy();
 
         done();
       });
