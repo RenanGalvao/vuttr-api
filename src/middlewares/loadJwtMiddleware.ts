@@ -13,15 +13,16 @@ const debug = debuglog('load-jwt');
 
 export default (req: Request, res: Response, next: NextFunction) => {
   debug(formatWithOptions({colors: true}, '[LOAD_JWT][INPUT] Request Body: %O\nRequest Cookies: %O', req.body, req.cookies));
+  
   // Load cookies
-  const accessToken = req.cookies?.acess_token ? req.cookies.acess_token : false;
+  const accessToken = req.cookies?.access_token ? req.cookies.access_token : false;
   const refreshToken = req.cookies?.refresh_token ? req.cookies.refresh_token : false;
 
   // Access Token
   if(accessToken){
+
     // Verify access token
     try{
-
       const decoded = jwt.verify(accessToken, accessPublicKey);
       res.locals.jwt = decoded;
       debug(formatWithOptions({colors: true}, '[LOAD_JWT][OUTPUT] Response Locals: %O', res.locals));

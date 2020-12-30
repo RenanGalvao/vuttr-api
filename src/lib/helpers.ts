@@ -40,8 +40,7 @@ export function createFilter(query: Request['query']){
   let queryConditions = Object();
   for(let i = 0; i < Object.keys(others).length; i++){
     queryConditions[Object.keys(others)[i]] = { 
-      $regex: `${Object.values(others)[i]}`,
-      $options: 'i', 
+      $search: `${Object.values(others)[i]}`
     };
   }
 
@@ -64,8 +63,8 @@ export function generateAuthCookies(res: Response, payload: Object) {
   const refreshToken = jwt.sign(payload, refreshPrivateKey, refreshOptions as jwt.SignOptions);
   
   // Set Cookies
-  res.cookie('acess_token', accessToken, accessCookieOptions as CookieOptions);
+  res.cookie('access_token', accessToken, accessCookieOptions as CookieOptions);
   res.cookie('refresh_token', refreshToken, refreshCookieOptions as CookieOptions);
 }
 
-export default { isAuthorized, createFilter };
+export default { isAuthorized, createFilter, generateAuthCookies };
